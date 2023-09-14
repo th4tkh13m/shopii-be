@@ -8,6 +8,7 @@ const morgan = require('morgan')
 // import middlewares
 const errorHandler = require('./middlewares/errorHandler')
 const notFound = require('./middlewares/notFound')
+const { authRouter } = require('./routes')
 
 const app = express()
 const PORT = process.env.PORT || 5001
@@ -18,6 +19,7 @@ app.use(cors())
 app.use(express.json())
 
 // routes
+app.use('/auth', authRouter)
 
 // error handler
 app.use(notFound)
