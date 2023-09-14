@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
     }
 
     if (err.code === 11000) {
-        customError.msg = `${Object.keys(err.keyValue)} already exists`
+        customError.msg = `User already exists`
         customError.statusCode = StatusCodes.BAD_REQUEST
     }
 
