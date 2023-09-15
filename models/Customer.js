@@ -11,7 +11,6 @@ const CustomerSchema = new mongoose.Schema({
     },
     mail: {
         type: String,
-        unique: true,
     },
     dob: {
         type: String,
