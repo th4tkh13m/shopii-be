@@ -7,7 +7,7 @@ const createAddress = async (req, res) => {
   const existingAddress = await Address.findOne({ receiverAddress, receiverName, receiverPhone, province, ward, district });
 
   if (existingAddress) {
-    throw { statusCode: StatusCodes.BAD_REQUEST, message: "Address already exists" };
+    throw createCustomError("Address already exists", StatusCodes.BAD_REQUEST);
   }
 
   const addresses = await Address.find({ userId });
@@ -26,7 +26,7 @@ const createAddress = async (req, res) => {
   const savedAddress = await address.save();
 
   if (!savedAddress) {
-    throw { statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: "There was an issue saving the address." };
+    throw createCustomError("There was an issue saving the address.", StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   res.status(StatusCodes.CREATED).json(savedAddress);
@@ -37,7 +37,7 @@ const getAddress = async (req, res) => {
   const addresses = await Address.find({ userId });
 
   if (!addresses || addresses.length === 0) {
-    throw { statusCode: StatusCodes.NOT_FOUND, message: "No addresses found for this user." };
+    throw createCustomError("No addresses found for this user.", StatusCodes.NOT_FOUND);
   }
 
   res.status(StatusCodes.OK).json(addresses);
