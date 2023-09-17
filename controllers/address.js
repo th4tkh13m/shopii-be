@@ -1,4 +1,5 @@
-const { Address } = require('../models/Address')
+const { Address } = require('../models//index');
+const { StatusCodes } = require('http-status-codes');
 
 const createAddress = async (req, res) => {
   const { userId, receiverAddress, receiverName, receiverPhone, province, ward, district } = req.body;
@@ -6,7 +7,7 @@ const createAddress = async (req, res) => {
   const existingAddress = await Address.findOne({ receiverAddress, receiverName, receiverPhone, province, ward, district });
 
   if (existingAddress) {
-    return res.status(400).json({ error: "Address already exists" });
+    throw { statusCode: StatusCodes.BAD_REQUEST, message: "Address already exists" };
   }
 
   const addresses = await Address.find({ userId });
@@ -25,24 +26,24 @@ const createAddress = async (req, res) => {
   const savedAddress = await address.save();
 
   if (!savedAddress) {
-    return res.status(500).json({ error: "There was an issue saving the address." });
+    throw { statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: "There was an issue saving the address." };
   }
 
-  res.json(savedAddress);
+  res.status(StatusCodes.CREATED).json(savedAddress);
 };
 
 const getAddress = async (req, res) => {
   const { userId } = req.params;
   const addresses = await Address.find({ userId });
 
-  if (!addresses) {
-    return res.status(404).json({ error: "No addresses found for this user." });
+  if (!addresses || addresses.length === 0) {
+    throw { statusCode: StatusCodes.NOT_FOUND, message: "No addresses found for this user." };
   }
 
-  res.json(addresses);
+  res.status(StatusCodes.OK).json(addresses);
 };
 
 module.exports = {
   createAddress,
   getAddress
-}
+};
