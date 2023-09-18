@@ -7,7 +7,6 @@ const CustomerSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        unique: true,
     },
     mail: {
         type: String,
