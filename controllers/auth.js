@@ -7,14 +7,11 @@ const register = async (req, res) => {
     const { phone, password, rePassword } = req.body
     const customerFound = await Customer.findOne({ phone })
     if (customerFound) {
-        throw createCustomError(
-            `Phone ${phone} already exists`,
-            StatusCodes.BAD_REQUEST,
-        )
+        throw createCustomError(`Tài khoản đã tồn tại`, StatusCodes.BAD_REQUEST)
     }
     if (password !== rePassword) {
         throw createCustomError(
-            'Password and rePassword do not match',
+            'Mật khẩu và nhập lại mật khẩu không khớp',
             StatusCodes.BAD_REQUEST,
         )
     }
@@ -41,11 +38,17 @@ const login = async (req, res) => {
     }
     const customer = await Customer.findOne({ mail, phone })
     if (!customer) {
-        throw createCustomError(`User ${info} not found`, StatusCodes.NOT_FOUND)
+        throw createCustomError(
+            `Không tìm thấy tài khoản`,
+            StatusCodes.NOT_FOUND,
+        )
     }
     const isPasswordCorrect = await customer.comparePassword(password)
     if (!isPasswordCorrect) {
-        throw createCustomError('Invalid credentials', StatusCodes.UNAUTHORIZED)
+        throw createCustomError(
+            'Tài khoản hoặc mật khẩu không đúng',
+            StatusCodes.UNAUTHORIZED,
+        )
     }
     res.status(StatusCodes.OK).json({
         ...customer.toObject(),
@@ -87,7 +90,7 @@ const loginGoogle = async (req, res) => {
     const { name, email, password, rePassword } = req.body
     if (password !== rePassword) {
         throw createCustomError(
-            'Password and rePassword do not match',
+            'Mật khẩu và nhập lại mật khẩu không khớp',
             StatusCodes.BAD_REQUEST,
         )
     }
