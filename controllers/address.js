@@ -43,24 +43,7 @@ const getAddress = async (req, res) => {
   res.status(StatusCodes.OK).json(addresses);
 };
 
-const deleteAddress = async (req, res) => {
-  const { userId, addressId } = req.params;
-
-  // Check if the address exists
-  const existingAddress = await Address.findOne({ _id: addressId, userId });
-
-  if (!existingAddress) {
-    return next(createCustomError("Address not found for this user.", StatusCodes.NOT_FOUND));
-  }
-
-  // Delete the address
-  await Address.findByIdAndDelete(addressId);
-
-  res.status(StatusCodes.OK).json({ message: "Address deleted successfully.", success: true });
-};
-
 module.exports = {
   createAddress,
   getAddress,
-  deleteAddress
 };
