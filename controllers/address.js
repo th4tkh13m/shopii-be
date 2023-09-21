@@ -51,7 +51,7 @@ const editAddress = async (req, res, next) => {
   const existingAddress = await Address.findOne({ _id: addressId, userId });
 
   if (!existingAddress) {
-    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));
+    return createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND);
   }
 
   if (updatedFields.isDefault && updatedFields.isDefault !== existingAddress.isDefault) {
@@ -76,7 +76,7 @@ const deleteAddress = async (req, res, next) => {
   const existingAddress = await Address.findOne({ _id: addressId, userId });
 
   if (!existingAddress) {
-    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));
+    return createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND);
   }
 
   // Delete the address
