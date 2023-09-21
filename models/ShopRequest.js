@@ -21,6 +21,6 @@ const ShopRequestSchema = new mongoose.Schema({
         enum: ["Pending", "Accepted", "Rejected"],
         default: "Pending",
     },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('ShopRequest', ShopRequestSchema);
