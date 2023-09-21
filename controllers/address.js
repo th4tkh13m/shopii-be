@@ -7,7 +7,7 @@ const createAddress = async (req, res) => {
   const existingAddress = await Address.findOne({ receiverAddress, receiverName, receiverPhone, province, ward, district });
 
   if (existingAddress) {
-    throw { statusCode: StatusCodes.BAD_REQUEST, message: "Address already exists" };
+    throw createCustomError("Địa chỉ đã tồn tại", StatusCodes.BAD_REQUEST);
   }
 
   const addresses = await Address.find({ userId });
@@ -26,7 +26,7 @@ const createAddress = async (req, res) => {
   const savedAddress = await address.save();
 
   if (!savedAddress) {
-    throw { statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: "There was an issue saving the address." };
+    throw createCustomError("Có sự cố khi lưu địa chỉ.", StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   res.status(StatusCodes.CREATED).json(savedAddress);
@@ -37,26 +37,25 @@ const getAddress = async (req, res) => {
   const addresses = await Address.find({ userId });
 
   if (!addresses || addresses.length === 0) {
-    throw { statusCode: StatusCodes.NOT_FOUND, message: "No addresses found for this user." };
+    throw createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND);
   }
 
   res.status(StatusCodes.OK).json(addresses);
 };
 
-const deleteAddress = async (req, res) => {
+const deleteAddress = async (req, res, next) => {
   const { userId, addressId } = req.params;
 
   // Check if the address exists
   const existingAddress = await Address.findOne({ _id: addressId, userId });
 
   if (!existingAddress) {
-    return next(createCustomError("Address not found for this user.", StatusCodes.NOT_FOUND));
-  }
+    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));  }
 
   // Delete the address
   await Address.findByIdAndDelete(addressId);
 
-  res.status(StatusCodes.OK).json({ message: "Address deleted successfully.", success: true });
+  res.status(StatusCodes.OK).json({ message: "Địa chỉ đã được xóa thành công.", success: true });
 };
 
 module.exports = {
