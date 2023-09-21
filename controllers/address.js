@@ -43,6 +43,32 @@ const getAddress = async (req, res) => {
   res.status(StatusCodes.OK).json(addresses);
 };
 
+const editAddress = async (req, res, next) => {
+  const { userId, addressId } = req.params;
+  const updatedFields = req.body;
+
+  // Check if the address exists for the specified user
+  const existingAddress = await Address.findOne({ _id: addressId, userId });
+
+  if (!existingAddress) {
+    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));
+  }
+
+  if (updatedFields.isDefault && updatedFields.isDefault !== existingAddress.isDefault) {
+    // Disable the previous default address for the user
+    await Address.updateMany({ userId }, { $set: { isDefault: false } });
+  }
+
+  // Update the address
+  const updatedAddress = await Address.findByIdAndUpdate(addressId, { ...updatedFields });
+
+  if (!updatedAddress) {
+    throw createCustomError("Có sự cố khi cập nhật địa chỉ.", StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
+  res.status(StatusCodes.OK).json({ message: "Địa chỉ đã được cập nhật thành công.", success: true });
+};
+
 const deleteAddress = async (req, res, next) => {
   const { userId, addressId } = req.params;
 
@@ -50,7 +76,8 @@ const deleteAddress = async (req, res, next) => {
   const existingAddress = await Address.findOne({ _id: addressId, userId });
 
   if (!existingAddress) {
-    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));  }
+    return next(createCustomError("Không tìm thấy địa chỉ cho người dùng này.", StatusCodes.NOT_FOUND));
+  }
 
   // Delete the address
   await Address.findByIdAndDelete(addressId);
@@ -61,5 +88,6 @@ const deleteAddress = async (req, res, next) => {
 module.exports = {
   createAddress,
   getAddress,
-  deleteAddress
+  deleteAddress,
+  editAddress
 };
