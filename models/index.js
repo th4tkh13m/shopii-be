@@ -1,3 +1,6 @@
 const Customer = require('./Customer')
-
-module.exports = { Customer }
+const ShopRequest = require('./ShopRequest')
+module.exports = {
+    Customer,
+    ShopRequest,
+}
