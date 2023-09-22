@@ -1,3 +1,8 @@
 const Customer = require('./Customer')
-
-module.exports = { Customer }
+const Address = require('./Address')
+const ShopRequest = require('./ShopRequest')
+module.exports = {
+    Customer,
+    Address,
+    ShopRequest
+}
