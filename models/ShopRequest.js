@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ShopRequestSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'Customers'
     },
     name: {
