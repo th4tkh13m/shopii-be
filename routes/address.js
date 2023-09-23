@@ -16,8 +16,3 @@ router
     .delete(deleteAddress)
     
 module.exports = router
-=======
-router.route('/:userId/:addressId').patch(editAddress).delete(deleteAddress).get(getAddress)
-
-module.exports = router
->>>>>>> parent of a91e7f5 (fix[SP-010]: fix code and prettier)
