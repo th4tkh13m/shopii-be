@@ -14,6 +14,7 @@ const createAddress = async (req, res) => {
   } = req.body
 
   const existingAddress = await Address.findOne({
+    userId,
     receiverAddress,
     receiverName,
     receiverPhone,

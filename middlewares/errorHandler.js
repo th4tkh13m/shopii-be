@@ -13,11 +13,6 @@ const errorHandler = (err, req, res, next) => {
         customError.statusCode = err.statusCode
     }
 
-    if (err.code === 11000) {
-        customError.msg = `${Object.keys(err.keyValue)} already exists`
-        customError.statusCode = StatusCodes.BAD_REQUEST
-    }
-
     res.status(customError.statusCode).json({ msg: customError.msg })
 }
 

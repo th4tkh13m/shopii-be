@@ -13,6 +13,5 @@ router
     .route('/:userId/:addressId')
     .patch(editAddress)
     .delete(deleteAddress)
-    .get(getAddress)
-
+    
 module.exports = router
