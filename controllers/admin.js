@@ -4,13 +4,13 @@ const { createCustomError } = require('../errors/CustomError')
 
 const getRequestByStatus = async (req, res) => {
     const request = await ShopRequest.find({ status: req.params.status })
-    if (request.length === 0) {
-        throw createCustomerError(
+    if (request.length == 0) {
+        const customError = createCustomError(
             'Không có yêu cầu nào.',
             StatusCodes.NOT_FOUND,
         )
+        throw customError
     }
-
     res.status(StatusCodes.OK).json(request)
 }
 const handleShopRequest = async (req, res) => {
