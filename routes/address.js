@@ -9,10 +9,6 @@ const router = express.Router()
 
 router.route('/').post(createAddress)
 router.route('/:userId').get(getAddress)
-<<<<<<< HEAD
-router
-    .route('/:userId/:addressId')
-    .patch(editAddress)
-    .delete(deleteAddress)
-    
+router.route('/:userId/:addressId').patch(editAddress).delete(deleteAddress)
+
 module.exports = router
