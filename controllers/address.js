@@ -13,10 +13,25 @@ const createAddress = async (req, res) => {
         district,
     } = req.body
 
-    const existingAddresses = await Address.find({ userId })
+    // Check if the address already exists for the user
+    const existingAddress = await Address.findOne({
+        userId,
+        receiverAddress,
+        receiverName,
+        receiverPhone,
+        province,
+        ward,
+        district,
+    })
 
-    // Set isDefault to false for all existing addresses of the user
-    await Address.updateMany({ userId }, { $set: { isDefault: false } })
+    if (existingAddress) {
+        throw createCustomError('Địa chỉ đã tồn tại', StatusCodes.BAD_REQUEST)
+    }
+
+    const addresses = await Address.find({ userId })
+
+    // Set isDefault to true if it's the first address, otherwise false
+    const isDefault = addresses.length === 0 ? true : false
 
     const address = new Address({
         userId,
@@ -26,7 +41,7 @@ const createAddress = async (req, res) => {
         province,
         ward,
         district,
-        isDefault: true,
+        isDefault,
     })
 
     const savedAddress = await address.save()
@@ -47,19 +62,11 @@ const getAddress = async (req, res) => {
     // Check if userId is provided, if so, retrieve addresses by userId
     if (userId) {
         const addresses = await Address.find({ userId })
-        if (!addresses || addresses.length === 0) {
-            throw createCustomError(
-                'Không tìm thấy địa chỉ cho người dùng này.',
-                StatusCodes.NOT_FOUND,
-            )
-        }
+
         res.status(StatusCodes.OK).json(addresses)
     } else {
-        // If userId is not provided, return an error
-        throw createCustomError(
-            'Vui lòng cung cấp thông tin hợp lệ.',
-            StatusCodes.BAD_REQUEST,
-        )
+        // If userId is not provided, return an empty array
+        res.status(StatusCodes.OK).json([])
     }
 }
 
