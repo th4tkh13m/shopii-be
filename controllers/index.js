@@ -1,7 +1,12 @@
 const { createAddress, getAddress } = require('./address')
 const { register, login, checkEmailExisted, loginGoogle } = require('./auth')
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
-const { getRequestByStatus, handleShopRequest } = require('./admin')
+const {
+    createAddress,
+    getAddress,
+    editAddress,
+    deleteAddress,
+} = require('./address')
 
 module.exports = {
     register,
@@ -9,9 +14,7 @@ module.exports = {
     createAddress,
     getAddress,
     checkEmailExisted,
-    loginGoogle,
     getAllRequestByUserId,
     shopRegister,
-    getRequestByStatus,
-    handleShopRequest,
+    editAddress,
 }
