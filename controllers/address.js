@@ -1,6 +1,6 @@
 const { Address } = require('../models//index')
 const { StatusCodes } = require('http-status-codes')
-const { createCustomError } = require('../errors//CustomError')
+const { createCustomError } = require('../errors/CustomError')
 
 const createAddress = async (req, res) => {
     const {
@@ -13,7 +13,9 @@ const createAddress = async (req, res) => {
         district,
     } = req.body
 
+    // Check if the address already exists for the user
     const existingAddress = await Address.findOne({
+        userId,
         receiverAddress,
         receiverName,
         receiverPhone,
@@ -28,6 +30,9 @@ const createAddress = async (req, res) => {
 
     const addresses = await Address.find({ userId })
 
+    // Set isDefault to true if it's the first address, otherwise false
+    const isDefault = addresses.length === 0 ? true : false
+
     const address = new Address({
         userId,
         receiverAddress,
@@ -36,7 +41,7 @@ const createAddress = async (req, res) => {
         province,
         ward,
         district,
-        isDefault: !addresses.length, // If no addresses, set isDefault to true
+        isDefault,
     })
 
     const savedAddress = await address.save()
@@ -52,44 +57,20 @@ const createAddress = async (req, res) => {
 }
 
 const getAddress = async (req, res) => {
-    const { userId, addressId } = req.params
+    const { userId } = req.params
 
     // Check if userId is provided, if so, retrieve addresses by userId
     if (userId) {
         const addresses = await Address.find({ userId })
 
-        if (!addresses || addresses.length === 0) {
-            return createCustomError(
-                'Không tìm thấy địa chỉ cho người dùng này.',
-                StatusCodes.NOT_FOUND,
-            )
-        }
-
-        return res.status(StatusCodes.OK).json(addresses)
+        res.status(StatusCodes.OK).json(addresses)
+    } else {
+        // If userId is not provided, return an empty array
+        res.status(StatusCodes.OK).json([])
     }
-
-    // Check if addressId is provided, if so, retrieve an address by addressId
-    if (addressId) {
-        const address = await Address.findOne({ _id: addressId, userId })
-
-        if (!address) {
-            return createCustomError(
-                'Không tìm thấy địa chỉ này.',
-                StatusCodes.NOT_FOUND,
-            )
-        }
-
-        return res.status(StatusCodes.OK).json(address)
-    }
-
-    // If neither userId nor addressId is provided, return an error
-    return createCustomError(
-        'Vui lòng cung cấp thông tin hợp lệ.',
-        StatusCodes.BAD_REQUEST,
-    )
 }
 
-const editAddress = async (req, res, next) => {
+const editAddress = async (req, res) => {
     const { userId, addressId } = req.params
     const updatedFields = req.body
 
@@ -97,7 +78,7 @@ const editAddress = async (req, res, next) => {
     const existingAddress = await Address.findOne({ _id: addressId, userId })
 
     if (!existingAddress) {
-        return createCustomError(
+        throw createCustomError(
             'Không tìm thấy địa chỉ cho người dùng này.',
             StatusCodes.NOT_FOUND,
         )
@@ -131,21 +112,34 @@ const editAddress = async (req, res, next) => {
     })
 }
 
-const deleteAddress = async (req, res, next) => {
+const deleteAddress = async (req, res) => {
     const { userId, addressId } = req.params
 
     // Check if the address exists
     const existingAddress = await Address.findOne({ _id: addressId, userId })
 
     if (!existingAddress) {
-        return createCustomError(
+        throw createCustomError(
             'Không tìm thấy địa chỉ cho người dùng này.',
             StatusCodes.NOT_FOUND,
         )
     }
 
+    const isDefault = existingAddress.isDefault
+
     // Delete the address
     await Address.findByIdAndDelete({ _id: addressId, userId })
+
+    // If the deleted address was the default, select another address as the new default
+    if (isDefault) {
+        const addresses = await Address.find({ userId })
+        if (addresses.length > 0) {
+            // Select the first address as the new default
+            const newDefaultAddress = addresses[0]
+            newDefaultAddress.isDefault = true
+            await newDefaultAddress.save()
+        }
+    }
 
     res.status(StatusCodes.OK).json({
         message: 'Địa chỉ đã được xóa thành công.',

@@ -10,5 +10,5 @@ module.exports = {
     ShopRequest,
     Shop,
     Product,
-    Category
+    Category,
 }
