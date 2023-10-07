@@ -39,14 +39,10 @@ const handleShopRequest = async (req, res) => {
             shopDescription: description,
             userId,
         })
-        const updateCustomer = await Customer.findByIdAndUpdate(
-            { _id: userId },
-            { hasShop: true },
-        )
+        await Customer.findByIdAndUpdate({ _id: userId }, { hasShop: true })
         return res.status(StatusCodes.OK).json({
             msg: 'Đã chấp nhận.',
             shop,
-            updateCustomer,
         })
     }
     res.status(StatusCodes.OK).json({
