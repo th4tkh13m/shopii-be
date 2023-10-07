@@ -20,4 +20,6 @@ module.exports = {
     loginGoogle,
     handleShopRequest,
     getRequestByStatus,
+    getRequestByStatus,
+    handleShopRequest,
 }
