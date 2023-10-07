@@ -44,6 +44,7 @@ const handleShopRequest = async (req, res) => {
         return res.status(StatusCodes.OK).json({
             msg: 'Đã chấp nhận.',
             shop,
+            updateCustomer,
         })
     }
     res.status(StatusCodes.OK).json({
