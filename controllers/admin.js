@@ -3,7 +3,7 @@ const { ShopRequest, Shop } = require('../models/index')
 const { createCustomError } = require('../errors/CustomError')
 
 const getRequestByStatus = async (req, res) => {
-    const request = await ShopRequest.find({ status: req.params.status })
+    const request = await ShopRequest.find({ status: req.query.status })
     if (request.length == 0) {
         const customError = createCustomError(
             'Không có yêu cầu nào.',
@@ -14,7 +14,7 @@ const getRequestByStatus = async (req, res) => {
     res.status(StatusCodes.OK).json(request)
 }
 const handleShopRequest = async (req, res) => {
-    const { userId, status } = req.query
+    const { userId, status } = req.body
     const request = await ShopRequest.findOne({
         userId,
         status: 'Pending',
