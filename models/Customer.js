@@ -23,6 +23,10 @@ const CustomerSchema = new mongoose.Schema({
     securityCode: {
         type: String,
     },
+    hasShop: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 CustomerSchema.pre('save', async function () {

@@ -14,7 +14,7 @@ const getRequestByStatus = async (req, res) => {
     res.status(StatusCodes.OK).json(request)
 }
 const handleShopRequest = async (req, res) => {
-    const { userId, status } = req.body
+    const { userId, status } = req.query
     const request = await ShopRequest.findOne({
         userId,
         status: 'Pending',
@@ -23,7 +23,10 @@ const handleShopRequest = async (req, res) => {
         throw createCustomError('Không có yêu cầu nào.', StatusCodes.NOT_FOUND)
     }
     if (['Accepted', 'Rejected'].includes(status)) {
-        await ShopRequest.findOneAndUpdate({ userId }, { status })
+        await ShopRequest.findOneAndUpdate(
+            { userId, status: 'Pending' },
+            { status },
+        )
     }
 
     if (status == 'Accepted') {
