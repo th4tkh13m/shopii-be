@@ -31,7 +31,7 @@ const handleShopRequest = async (req, res) => {
         )
     }
 
-    if (status == 'Accepted') {
+    if (status === 'Accepted') {
         const { name, address, description } = request
         const shop = await Shop.create({
             shopName: name,
