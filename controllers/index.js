@@ -1,5 +1,6 @@
 const { register, login, checkEmailExisted, loginGoogle } = require('./auth')
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
+const { getRequestByStatus, handleShopRequest } = require('./admin')
 const {
     getAllProducts,
     getProductById,
@@ -15,6 +16,8 @@ module.exports = {
     loginGoogle,
     getAllRequestByUserId,
     shopRegister,
+    getRequestByStatus,
+    handleShopRequest,
     getAllProducts,
     getProductById,
     createProduct,
