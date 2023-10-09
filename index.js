@@ -9,12 +9,17 @@ const cookieParser = require('cookie-parser')
 // import middlewares
 const errorHandler = require('./middlewares/errorHandler')
 const notFound = require('./middlewares/notFound')
-const { authRouter, shopRequestRouter, adminRouter } = require('./routes')
+const {
+    authRouter,
+    shopRequestRouter,
+    adminRouter,
+    addressRouter,
+} = require('./routes')
 const {
     verifyAdmin,
     verifyUser,
     verifyShop,
-} = require('./middlewares//authenticateToken')
+} = require('./middlewares/authenticateToken')
 
 const app = express()
 const PORT = process.env.PORT || 5001
@@ -28,6 +33,7 @@ app.use(cookieParser())
 // routes
 app.use('/auth', authRouter)
 app.use('/shop-request', verifyUser, shopRequestRouter)
+app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
 
 // error handler
