@@ -2,6 +2,7 @@ const { Customer } = require('../models//index')
 const { createCustomError } = require('../errors/CustomError')
 const { StatusCodes } = require('http-status-codes')
 const { generateName, generateCode } = require('../utils/utils')
+const jwt = require('jsonwebtoken')
 
 const register = async (req, res) => {
     const { phone, password, rePassword } = req.body
@@ -50,9 +51,16 @@ const login = async (req, res) => {
             StatusCodes.UNAUTHORIZED,
         )
     }
+    const token = generateJWTToken({
+        userId: customer._id,
+        name: customer.name,
+        roles: customer.roles,
+    })
+    res.cookie('token', token, { maxAge: 86400000, httpOnly: true })
     res.status(StatusCodes.OK).json({
         ...customer.toObject(),
         password: undefined,
+        securityCode: undefined,
     })
 }
 
@@ -80,9 +88,17 @@ const checkEmailExisted = async (req, res) => {
             StatusCodes.NOT_FOUND,
         )
     }
+    console.log(customer._id.toString())
+    const token = generateJWTToken({
+        userId: customer._id,
+        name: customer.name,
+        roles: customer.roles,
+    })
+    res.cookie('token', token, { maxAge: 86400000, httpOnly: true })
     res.status(StatusCodes.OK).json({
         ...customer.toObject(),
         password: undefined,
+        securityCode: undefined,
     })
 }
 
@@ -100,9 +116,41 @@ const loginGoogle = async (req, res) => {
         name,
         securityCode: generateCode(),
     })
+    const token = generateJWTToken({
+        userId: customer._id,
+        name: customer.name,
+        roles: customer.roles,
+    })
+
+    res.cookie('token', token, { maxAge: 86400000, httpOnly: true })
     res.status(StatusCodes.CREATED).json({
         ...customer.toObject(),
         password: undefined,
+        securityCode: undefined,
+    })
+}
+
+const generateJWTToken = customer => {
+    return jwt.sign(
+        {
+            userId: customer.userId,
+            name: customer.name,
+            roles: customer.roles,
+        },
+        process.env.JWT_SECRET,
+    )
+}
+
+const checkSession = async (req, res) => {
+    const { userId, name } = req.user
+    const customer = await Customer.findById({ _id: userId, name })
+    if (!customer) {
+        throw createCustomError(`User not found`, StatusCodes.NOT_FOUND)
+    }
+    res.status(StatusCodes.OK).json({
+        ...customer.toObject(),
+        password: undefined,
+        securityCode: undefined,
     })
 }
 
@@ -112,4 +160,5 @@ module.exports = {
     resetPassword,
     checkEmailExisted,
     loginGoogle,
+    checkSession,
 }
