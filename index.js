@@ -8,7 +8,12 @@ const morgan = require('morgan')
 // import middlewares
 const errorHandler = require('./middlewares/errorHandler')
 const notFound = require('./middlewares/notFound')
-const { authRouter, shopRequestRouter, adminRouter } = require('./routes')
+const {
+    authRouter,
+    shopRequestRouter,
+    adminRouter,
+    addressRouter,
+} = require('./routes')
 
 const app = express()
 const PORT = process.env.PORT || 5001
@@ -22,6 +27,7 @@ app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/shop-request', shopRequestRouter)
 app.use('/admin', adminRouter)
+app.use('/address', addressRouter)
 
 // error handler
 app.use(notFound)
