@@ -23,9 +23,10 @@ const CustomerSchema = new mongoose.Schema({
     securityCode: {
         type: String,
     },
-    hasShop: {
-        type: Boolean,
-        default: false,
+    roles: {
+        type: [String],
+        default: ['user'],
+        enum: ['admin', 'user', 'shop'],
     },
 })
 
