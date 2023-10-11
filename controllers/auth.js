@@ -88,7 +88,6 @@ const checkEmailExisted = async (req, res) => {
             StatusCodes.NOT_FOUND,
         )
     }
-    console.log(customer._id.toString())
     const token = generateJWTToken({
         userId: customer._id,
         name: customer.name,
@@ -154,6 +153,11 @@ const checkSession = async (req, res) => {
     })
 }
 
+const logout = (req, res) => {
+    res.cookie('token', '', { maxAge: 0 })
+    res.status(StatusCodes.OK).json({ message: 'Logout successfully' })
+}
+
 module.exports = {
     register,
     login,
@@ -161,4 +165,5 @@ module.exports = {
     checkEmailExisted,
     loginGoogle,
     checkSession,
+    logout,
 }

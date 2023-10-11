@@ -4,6 +4,7 @@ const {
     checkEmailExisted,
     loginGoogle,
     checkSession,
+    logout,
 } = require('./auth')
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
 const { getRequestByStatus, handleShopRequest } = require('./admin')
@@ -28,4 +29,5 @@ module.exports = {
     getAddress,
     editAddress,
     deleteAddress,
+    logout,
 }
