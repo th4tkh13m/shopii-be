@@ -13,6 +13,7 @@ const {
     editAddress,
     deleteAddress,
 } = require('./address')
+const { getAllCategory, createCategory } = require('./category')
 const { getRequestByStatus, handleShopRequest } = require('./admin')
 
 module.exports = {
@@ -33,4 +34,6 @@ module.exports = {
     editAddress,
     deleteAddress,
     logout,
+    getAllCategory,
+    createCategory,
 }
