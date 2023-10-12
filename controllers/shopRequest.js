@@ -30,10 +30,7 @@ const shopRegister = async (req, res) => {
 const getAllRequestByUserId = async (req, res) => {
     const shopRequests = await ShopRequest.find({ userId: req.params.userId })
     if (shopRequests.length === 0) {
-        throw createCustomError(
-            'No shop requests found for this customer',
-            StatusCodes.NOT_FOUND,
-        )
+        throw createCustomError('Không có yêu cầu nào.', StatusCodes.NOT_FOUND)
     }
     res.status(StatusCodes.OK).json(shopRequests)
 }
