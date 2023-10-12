@@ -10,9 +10,6 @@ const getRequestByStatus = async (req, res) => {
     } else {
         request = await ShopRequest.find({ status })
     }
-    if (request.length === 0) {
-        throw createCustomError('Không có yêu cầu nào.', StatusCodes.NOT_FOUND)
-    }
     res.status(StatusCodes.OK).json(request)
 }
 const handleShopRequest = async (req, res) => {
