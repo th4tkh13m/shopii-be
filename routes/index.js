@@ -6,6 +6,7 @@ const categoryRouter = require('./category')
 
 module.exports = {
     authRouter,
+    addressRouter,
     shopRequestRouter,
     adminRouter,
     addressRouter,
