@@ -15,5 +15,5 @@ module.exports = {
     Category,
     Address,
     ProductOption,
-    Token
+    Token,
 }
