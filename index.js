@@ -36,7 +36,7 @@ app.use('/auth', authRouter)
 app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
-app.use('/category', categoryRouter)
+app.use('/category', verifyAdmin, categoryRouter)
 
 // error handler
 app.use(notFound)
