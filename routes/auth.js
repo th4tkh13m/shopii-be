@@ -2,6 +2,8 @@ const express = require('express')
 const {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -16,5 +18,7 @@ router.post('/check-email', checkEmailExisted)
 router.post('/login-google', loginGoogle)
 router.post('/check-session', verifyUser, checkSession)
 router.post('/logout', logout)
+router.post('/reset-password', genCodeResetPassword)
+router.put('/reset-password', resetPassword)
 
 module.exports = router
