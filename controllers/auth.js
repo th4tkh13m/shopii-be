@@ -114,16 +114,7 @@ const resetPassword = async (req, res) => {
     // const objectId = mongoose.Types.ObjectId(objectIdString);
     const _token = await Token.findById(tokenId).populate('customer').exec()
 
-<<<<<<< HEAD
-    if (_token.token == token) {
-=======
-    console.log(_token)
-<<<<<<< HEAD
-    if (_token.token === token) {
->>>>>>> 87ef30c (fix[SP-012]: change the quals)
-=======
     if (_token.token !== token) {
->>>>>>> b9e7713 (fix: change the sign and token in error)
         throw createCustomError(
             `Mã xác thục ${token} không đúng`,
             StatusCodes.BAD_REQUEST,
@@ -229,6 +220,7 @@ module.exports = {
     register,
     login,
     genCodeResetPassword,
+    changePassword,
     resetPassword,
     checkEmailExisted,
     loginGoogle,
