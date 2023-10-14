@@ -1,4 +1,4 @@
-const { Customer } = require('../models//index')
+const { Customer, Token } = require('../models//index')
 const { createCustomError } = require('../errors/CustomError')
 const { StatusCodes } = require('http-status-codes')
 const { generateName, generateCode } = require('../utils/utils')
@@ -64,7 +64,7 @@ const login = async (req, res) => {
     })
 }
 
-const resetPassword = async (req, res) => {
+const genCodeResetPassword = async (req, res) => {
     const { info, code } = req.body
     let email = null
     let phone = null
@@ -75,8 +75,69 @@ const resetPassword = async (req, res) => {
     }
     const customer = await Customer.findOne({ email, phone })
     if (!customer) {
-        throw createCustomError(`User ${info} not found`, StatusCodes.NOT_FOUND)
+        throw createCustomError(
+            `Người dùng với thông tin ${info} không tồn tại`,
+            StatusCodes.NOT_FOUND,
+        )
     }
+
+    if (customer.securityCode != code) {
+        throw createCustomError(
+            `Mã xác thục ${code} không đúng`,
+            StatusCodes.BAD_REQUEST,
+        )
+    }
+    // Check for existing tokens
+    const exToken = await Token.findOne({ customer: customer._id })
+
+    if (exToken) {
+        throw createCustomError(
+            `Đã tồn tại code trong hệ thống. Hãy đợi đến khi code hết hạn.`,
+            StatusCodes.BAD_REQUEST,
+        )
+    }
+
+    const tokenStr = generateCode()
+    const token = await Token.create({
+        token: tokenStr,
+        customer: customer._id,
+    })
+
+    res.status(StatusCodes.OK).json({
+        ...token.toObject(),
+    })
+}
+
+const resetPassword = async (req, res) => {
+    const { tokenId, token, password, rePassword } = req.body
+
+    // const objectId = mongoose.Types.ObjectId(objectIdString);
+    const _token = await Token.findById(tokenId).populate('customer').exec()
+
+    console.log(_token)
+    if (_token.token === token) {
+        throw createCustomError(
+            `Mã xác thục ${code} không đúng`,
+            StatusCodes.BAD_REQUEST,
+        )
+    }
+
+    if (password !== rePassword) {
+        throw createCustomError('Mật khẩu không khớp.', StatusCodes.BAD_REQUEST)
+    }
+
+    const customer = _token.customer
+    console.log(customer)
+    customer.password = password
+
+    await customer.save()
+    await _token.deleteOne()
+
+    res.status(StatusCodes.OK).json({
+        ...customer.toObject(),
+        password: undefined,
+        securityCode: undefined,
+    })
 }
 
 const checkEmailExisted = async (req, res) => {
@@ -161,6 +222,7 @@ const logout = (req, res) => {
 module.exports = {
     register,
     login,
+    genCodeResetPassword,
     resetPassword,
     checkEmailExisted,
     loginGoogle,

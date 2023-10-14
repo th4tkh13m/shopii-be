@@ -1,6 +1,8 @@
 const {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -19,6 +21,8 @@ const { getRequestByStatus, handleShopRequest } = require('./admin')
 module.exports = {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     getAllRequestByUserId,
     shopRegister,
