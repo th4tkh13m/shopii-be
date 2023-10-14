@@ -118,10 +118,14 @@ const resetPassword = async (req, res) => {
     if (_token.token == token) {
 =======
     console.log(_token)
+<<<<<<< HEAD
     if (_token.token === token) {
 >>>>>>> 87ef30c (fix[SP-012]: change the quals)
+=======
+    if (_token.token !== token) {
+>>>>>>> b9e7713 (fix: change the sign and token in error)
         throw createCustomError(
-            `Mã xác thục ${code} không đúng`,
+            `Mã xác thục ${token} không đúng`,
             StatusCodes.BAD_REQUEST,
         )
     }
