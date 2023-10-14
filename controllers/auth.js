@@ -114,14 +114,19 @@ const resetPassword = async (req, res) => {
     // const objectId = mongoose.Types.ObjectId(objectIdString);
     const _token = await Token.findById(tokenId).populate('customer').exec()
 
+<<<<<<< HEAD
     if (_token.token == token) {
+=======
+    console.log(_token)
+    if (_token.token === token) {
+>>>>>>> 87ef30c (fix[SP-012]: change the quals)
         throw createCustomError(
             `Mã xác thục ${code} không đúng`,
             StatusCodes.BAD_REQUEST,
         )
     }
 
-    if (password != rePassword) {
+    if (password !== rePassword) {
         throw createCustomError('Mật khẩu không khớp.', StatusCodes.BAD_REQUEST)
     }
 
