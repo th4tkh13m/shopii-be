@@ -64,6 +64,33 @@ const login = async (req, res) => {
     })
 }
 
+const changePassword = async (req, res) => {
+    const { customerId, oldPassword, newPassword, reNewPassword } = req.body
+
+    if (newPassword !== reNewPassword) {
+        throw createCustomError(
+            'Mật khẩu và nhập lại mật khẩu không khớp',
+            StatusCodes.BAD_REQUEST,
+        )
+    }
+
+    const customer = await Customer.findById(customerId)
+
+    const isPasswordCorrect = await customer.comparePassword(oldPassword)
+    if (!isPasswordCorrect) {
+        throw createCustomError('Mật khẩu không đúng', StatusCodes.UNAUTHORIZED)
+    }
+
+    customer.password = newPassword
+    await customer.save()
+
+    res.status(StatusCodes.OK).json({
+        ...customer.toObject(),
+        password: undefined,
+        securityCode: undefined,
+    })
+}
+
 const genCodeResetPassword = async (req, res) => {
     const { info, code } = req.body
     let email = null
@@ -223,6 +250,7 @@ module.exports = {
     register,
     login,
     genCodeResetPassword,
+    changePassword,
     resetPassword,
     checkEmailExisted,
     loginGoogle,
