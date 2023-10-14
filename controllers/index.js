@@ -1,6 +1,7 @@
 const {
     register,
     login,
+    changePassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -19,6 +20,7 @@ const { getAllCategory, createCategory } = require('./category')
 module.exports = {
     register,
     login,
+    changePassword,
     checkEmailExisted,
     loginGoogle,
     getAllRequestByUserId,
