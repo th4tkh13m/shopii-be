@@ -36,7 +36,11 @@ const handleShopRequest = async (req, res) => {
             shopDescription: description,
             userId,
         })
-        await Customer.findByIdAndUpdate({ _id: userId }, { hasShop: true })
+        // Push 'shop' to roles array of user
+        await Customer.findByIdAndUpdate(
+            { _id: userId },
+            { $push: { roles: 'shop' } },
+        )
         return res.status(StatusCodes.OK).json({
             msg: 'Đã chấp nhận.',
             shop,

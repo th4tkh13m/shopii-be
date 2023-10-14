@@ -21,6 +21,7 @@ const {
     editAddress,
     deleteAddress,
 } = require('./address')
+const { getAllCategory, createCategory } = require('./category')
 
 module.exports = {
     register,
@@ -42,4 +43,6 @@ module.exports = {
     editAddress,
     deleteAddress,
     logout,
+    getAllCategory,
+    createCategory,
 }
