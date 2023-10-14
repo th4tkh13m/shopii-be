@@ -13,7 +13,7 @@ const {
     authRouter,
     shopRequestRouter,
     adminRouter,
-    productRouter,
+    shopRoute,
     addressRouter,
     categoryRouter,
 } = require('./routes')
@@ -34,7 +34,7 @@ app.use(cookieParser())
 
 // routes
 app.use('/auth', authRouter)
-app.use('/product', productRouter)
+app.use('/shop', verifyShop, shopRoute)
 app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
