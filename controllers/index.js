@@ -9,6 +9,7 @@ const {
     logout,
 } = require('./auth')
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
+const { getRequestByStatus, handleShopRequest } = require('./admin')
 const {
     createAddress,
     getAddress,
@@ -16,7 +17,7 @@ const {
     deleteAddress,
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
-const { getRequestByStatus, handleShopRequest } = require('./admin')
+const { getAllShopInfo, updateShop } = require('./shop')
 
 module.exports = {
     register,
@@ -40,4 +41,6 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
+    getAllShopInfo,
+    updateShop,
 }
