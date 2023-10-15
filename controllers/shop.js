@@ -10,12 +10,9 @@ const getAllShopInfo = async (req, res) => {
 const updateShop = async (req, res) => {
     const userId = req.user.userId
     const updateFields = req.body
-
-    const updatedShop = await Shop.findOneAndUpdate(
-        { userId },
-        { ...updateFields },
-    )
-    res.status(StatusCodes.CREATED).json(updatedShop)
+    await Shop.findOneAndUpdate({ userId }, { ...updateFields })
+    const shopInfo = await Shop.findOne({ userId })
+    res.status(StatusCodes.CREATED).json(shopInfo)
 }
 
 module.exports = {

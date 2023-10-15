@@ -38,10 +38,7 @@ app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
 app.use('/category', verifyAdmin, categoryRouter)
-<<<<<<< HEAD
-=======
 app.use('/shop', verifyShop, shopRouter)
->>>>>>> SP-026
 
 // error handler
 app.use(notFound)
