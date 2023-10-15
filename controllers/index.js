@@ -28,6 +28,8 @@ const { getAllShopInfo, updateShop } = require('./shop')
 const {
     getAllProducts: getAllProductsUser,
     getProductById: getProductByIdUser,
+    getShops,
+    getShopById,
 } = require('./products')
 
 module.exports = {
@@ -58,4 +60,6 @@ module.exports = {
     updateShop,
     getAllProductsUser,
     getProductByIdUser,
+    getShops,
+    getShopById,
 }

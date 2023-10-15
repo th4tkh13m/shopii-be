@@ -82,7 +82,55 @@ const getAllProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {}
 
+const getShops = async (req, res) => {
+    const { location, keyword } = req.query
+    console.log(1)
+    const queryObject = {}
+    if (keyword) {
+        queryObject.shopName = { $regex: keyword, $options: 'i' }
+    }
+    if (location) {
+        queryObject.shopAddress = { $in: location }
+    }
+    const result = Shop.find(queryObject)
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 10
+    const skip = (page - 1) * limit
+    result.skip(skip).limit(limit)
+    const shops = await result.exec()
+    const totalPage = Math.ceil(
+        (await Shop.countDocuments(queryObject)) / limit,
+    )
+    res.status(StatusCodes.OK).json({
+        shops,
+        length: shops.length,
+        totalPage,
+    })
+}
+
+const getShopById = async (req, res) => {
+    const { id } = req.params
+    const shop = await Shop.findById(id).populate({
+        path: 'products',
+        populate: [
+            {
+                path: 'productCategory',
+                select: 'categoryName',
+            },
+            {
+                path: 'productOptions',
+                select: 'optionPrice',
+            },
+        ],
+    })
+    res.status(StatusCodes.OK).json({
+        shop,
+    })
+}
+
 module.exports = {
     getAllProducts,
     getProductById,
+    getShops,
+    getShopById,
 }
