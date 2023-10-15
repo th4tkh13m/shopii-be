@@ -1,8 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const { getAllProductsUser, getProductByIdUser } = require('../controllers/')
+const {
+    getAllProductsUser,
+    getProductByIdUser,
+    getShops,
+    getShopById,
+} = require('../controllers/')
 
-router.get('/', getAllProductsUser)
-router.get('/:id', getProductByIdUser)
+router
+    .get('/', getAllProductsUser)
+    .get('/shops', getShops)
+    .get('/:id', getProductByIdUser)
+    .get('/shops/:id', getShopById)
 
 module.exports = router

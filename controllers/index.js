@@ -18,6 +18,8 @@ const { getAllCategory, createCategory } = require('./category')
 const {
     getAllProducts: getAllProductsUser,
     getProductById: getProductByIdUser,
+    getShops,
+    getShopById,
 } = require('./products')
 
 module.exports = {
@@ -39,4 +41,6 @@ module.exports = {
     createCategory,
     getAllProductsUser,
     getProductByIdUser,
+    getShops,
+    getShopById,
 }
