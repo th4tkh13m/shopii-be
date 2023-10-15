@@ -15,6 +15,10 @@ const {
     deleteAddress,
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
+const {
+    getAllProducts: getAllProductsUser,
+    getProductById: getProductByIdUser,
+} = require('./products')
 
 module.exports = {
     register,
@@ -33,4 +37,6 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
+    getAllProductsUser,
+    getProductByIdUser,
 }
