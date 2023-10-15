@@ -17,6 +17,7 @@ const {
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
 const { getRequestByStatus, handleShopRequest } = require('./admin')
+const { getAllShopInfo, updateShop } = require('./shop')
 
 module.exports = {
     register,
@@ -40,4 +41,6 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
+    getAllShopInfo,
+    updateShop,
 }
