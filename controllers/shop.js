@@ -1,5 +1,4 @@
 const { StatusCodes } = require('http-status-codes')
-const { createCustomError } = require('../errors/CustomError')
 const { Shop } = require('../models')
 
 const getAllShopInfo = async (req, res) => {
@@ -11,11 +10,12 @@ const updateShop = async (req, res) => {
     const userId = req.user.userId
     const updateFields = req.body
 
-    const updatedShop = await Shop.findOneAndUpdate(
+    const shopInfo = await Shop.findOneAndUpdate(
         { userId },
         { ...updateFields },
+        { new: true, runValidator: true },
     )
-    res.status(StatusCodes.CREATED).json(updatedShop)
+    res.status(StatusCodes.CREATED).json(shopInfo)
 }
 
 module.exports = {
