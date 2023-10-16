@@ -186,7 +186,6 @@ const loginGoogle = async (req, res) => {
     res.status(StatusCodes.CREATED).json({
         ...customer.toObject(),
         password: undefined,
-        securityCode: undefined,
     })
 }
 
