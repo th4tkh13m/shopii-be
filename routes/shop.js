@@ -1,9 +1,5 @@
 const express = require('express')
-const router = express.Router()
-const multer = require('multer')
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
-
+const { getAllShopInfo, updateShop } = require('../controllers')
 const {
     getAllProducts,
     getProductById,
@@ -12,6 +8,11 @@ const {
     deleteProduct,
 } = require('../controllers')
 
+const multer = require('multer')
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
+router.route('/profile').get(getAllShopInfo).patch(updateShop)
 router
     .route('/product')
     .get(getAllProducts)
