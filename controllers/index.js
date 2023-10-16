@@ -25,6 +25,12 @@ const {
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
 const { getAllShopInfo, updateShop } = require('./shop')
+const {
+    getAllProducts: getAllProductsUser,
+    getProductById: getProductByIdUser,
+    getShops,
+    getShopById,
+} = require('./products')
 
 module.exports = {
     register,
@@ -55,4 +61,8 @@ module.exports = {
     createCategory,
     getAllShopInfo,
     updateShop,
+    getAllProductsUser,
+    getProductByIdUser,
+    getShops,
+    getShopById,
 }
