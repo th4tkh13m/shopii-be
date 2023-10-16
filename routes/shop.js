@@ -1,11 +1,13 @@
 const express = require('express')
-const { getAllShopInfo, updateShop } = require('../controllers')
+const router = express.Router()
 const {
     getAllProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
+    getAllShopInfo,
+    updateShop,
 } = require('../controllers')
 
 const multer = require('multer')
