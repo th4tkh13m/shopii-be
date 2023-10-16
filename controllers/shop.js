@@ -11,9 +11,11 @@ const updateShop = async (req, res) => {
     const userId = req.user.userId
     const updateFields = req.body
 
-    await Shop.findOneAndUpdate({ userId }, { ...updateFields })
-
-    const shopInfo = await Shop.findOne({ userId })
+    const shopInfo = await Shop.findOneAndUpdate(
+        { userId },
+        { ...updateFields },
+        { new: true, runValidator: true },
+    )
     res.status(StatusCodes.CREATED).json(shopInfo)
 }
 

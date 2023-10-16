@@ -38,7 +38,7 @@ app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
 app.use('/category', verifyAdmin, categoryRouter)
-app.use('/shop', shopRouter)
+app.use('/shop', verifyShop, shopRouter)
 
 // error handler
 app.use(notFound)
