@@ -113,17 +113,10 @@ const deleteProduct = async (req, res) => {
     res.status(StatusCodes.OK).send()
 }
 
-const createProductOptions = async (req, res) => {
-    const productsOptionCreated = await ProductOption.insertMany(req.body)
-    const productIds = productsOptionCreated.map(product => product._id)
-    res.status(StatusCodes.CREATED).json(productIds)
-}
-
 module.exports = {
     getAllProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
-    createProductOptions,
 }

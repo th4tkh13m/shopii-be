@@ -14,7 +14,6 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    createProductOptions,
 } = require('./shopProduct')
 const {
     createAddress,
@@ -46,5 +45,4 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
-    createProductOptions,
 }

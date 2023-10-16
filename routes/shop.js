@@ -10,7 +10,6 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    createProductOptions,
 } = require('../controllers')
 
 router
@@ -22,6 +21,5 @@ router
     .get(getProductById)
     .patch(upload.array('imagesAdded', 5), updateProduct)
     .delete(deleteProduct)
-router.route('/productOptions').post(createProductOptions)
 
 module.exports = router
