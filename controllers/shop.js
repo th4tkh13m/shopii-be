@@ -1,5 +1,4 @@
 const { StatusCodes } = require('http-status-codes')
-const { createCustomError } = require('../errors/CustomError')
 const { Shop } = require('../models')
 
 const getAllShopInfo = async (req, res) => {
