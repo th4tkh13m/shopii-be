@@ -4,6 +4,6 @@ const { verifyAdmin } = require('../middlewares/authenticateToken')
 const router = express.Router()
 
 router.get('/', getAllCategory)
-router.post('/createCategory', createCategory)
+router.post('/createCategory', verifyAdmin, createCategory)
 
 module.exports = router

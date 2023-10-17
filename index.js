@@ -39,7 +39,7 @@ app.use('/shop', verifyShop, shopRoute)
 app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
-app.use('/category', verifyAdmin, categoryRouter)
+app.use('/category', categoryRouter)
 app.use('/shop', verifyShop, shopRouter)
 
 // error handler
