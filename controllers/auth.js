@@ -65,7 +65,8 @@ const login = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const { customerId, oldPassword, newPassword, reNewPassword } = req.body
+    const { oldPassword, newPassword, reNewPassword } = req.body
+    const customerId = req.user.userId
 
     if (newPassword !== reNewPassword) {
         throw createCustomError(
