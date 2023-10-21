@@ -2,14 +2,8 @@ const Product = require('../models/Product')
 const { StatusCodes } = require('http-status-codes')
 const ProductOption = require('../models/ProductOption')
 const { Shop } = require('../models')
-const TEST_IMAGES = [
-    'https://www.apple.com/newsroom/images/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/tile/Apple-iPhone-15-Pro-lineup-hero-230912.jpg.news_app_ed.jpg',
-    'https://minhtuanmobile.com/uploads/blog/tai-sao-iphone-15-va-iphone-15-plus-mau-hong-se-thanh-hot-trend-230915021036.jpg',
-]
+const { putImages, getImages, deleteImages } = require('../utils/awsServices')
 
-const TEST_UPDATED_IMAGES = [
-    'https://cdn.tgdd.vn/Files/2023/01/07/1501293/cauhinh_1280x853-800-resize.jpg',
-]
 const getAllProducts = async (req, res) => {
     const shop = await Shop.findOne({ userId: req.user.userId })
         .populate({
@@ -49,11 +43,13 @@ const createProduct = async (req, res) => {
     )
     const productIds = productsOptionCreated.map(product => product._id)
     // Create image in S3 from array [File] filesImage. After create image create variables [String]
-    // and replace variables TEST_IMAGES
+    await putImages('products', productIds, filesImage)
+    const imageUrls = await getImages('products', productIds)
+
     const product = await Product.create({
         ...req.body,
         productOptions: productIds,
-        productImages: TEST_IMAGES,
+        productImages: imageUrls,
     })
     await Shop.findOneAndUpdate(
         { userId: req.user.userId },
@@ -84,12 +80,18 @@ const updateProduct = async (req, res) => {
         image => !imagesDeleted.includes(image),
     )
     if (imagesAdded) {
+        await putImages('products', productId, imagesAdded)
     }
     // Delete image from S3 with array type [String] imagesDeleted
     // Add image to S3 from array [File] imagesAdded. After create image create variables [String]
     //store link and replace variables TEST_UPDATED_IMAGES
+    if (imagesDeleted) {
+        console.log(imagesDeleted)
+        await deleteImages(imagesDeleted)
+    }
 
-    const productImages = [...productImagesAfterDelete, ...TEST_UPDATED_IMAGES]
+    const productImages = await getImages('products', productId)
+
     const productUpdated = await Product.findByIdAndUpdate(
         { _id: productId },
         {
