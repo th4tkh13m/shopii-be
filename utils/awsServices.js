@@ -1,5 +1,10 @@
-const { S3Client, ListObjectsV2Command, PutObjectCommand } = require('@aws-sdk/client-s3')
-require('dotenv').config()
+const {
+    S3Client,
+    ListObjectsV2Command,
+    PutObjectCommand,
+    DeleteObjectCommand,
+} = require('@aws-sdk/client-s3')
+const { v4: uuidv4 } = require('uuid')
 
 const client = new S3Client({
     region: process.env.REGION,
@@ -15,6 +20,15 @@ const commandParams = {
 
 const getImageUrl = (bucket, region, key) => {
     return `https://${bucket}.s3.${region}.amazonaws.com/${key}`
+}
+
+const getImageKey = url => {
+    const index = url.indexOf('.amazonaws.com/')
+    if (index !== -1) {
+        return url.substring(index + '.amazonaws.com/'.length)
+    } else {
+        return null // Return null if ".amazonaws.com/" is not found in the URL
+    }
 }
 
 const getImages = async (type, typeId) => {
@@ -39,29 +53,36 @@ const putImages = async (type, typeId, images) => {
     const path = `${type}/${typeId}`
 
     for (let index = 0; index < images.length; index++) {
-        const element = images[index];
+        const element = images[index]
+        const imageName = `${uuidv4()}.png`
 
-        var imagePath = `${path}/${element.name}`
+        var imagePath = `${path}/${imageName}`
 
         var putCommandParams = {
             ...commandParams,
             Key: imagePath,
-            Body: element.stream()
+            Body: element.buffer,
         }
 
         await client.send(new PutObjectCommand(putCommandParams))
     }
-
-    const imageUrls = images.forEach(element => {
-        return `${path}/${element.name}`
-    });
-
-    return imageUrls
 }
 
-getImages('products', 1)
+const deleteImages = async deleteImages => {
+    for (let index = 0; index < deleteImages.length; index++) {
+        const key = getImageKey(deleteImages[index])
+        console.log(key)
+        var deleteCommandParams = {
+            ...commandParams,
+            Key: key,
+        }
+
+        await client.send(new DeleteObjectCommand(deleteCommandParams))
+    }
+}
 
 module.exports = {
     getImages,
-    putImages
+    putImages,
+    deleteImages,
 }
