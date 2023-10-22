@@ -9,6 +9,13 @@ const {
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
 const { getRequestByStatus, handleShopRequest } = require('./admin')
 const {
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+} = require('./shopProduct')
+const {
     createAddress,
     getAddress,
     editAddress,
@@ -26,6 +33,11 @@ module.exports = {
     shopRegister,
     getRequestByStatus,
     handleShopRequest,
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
     checkSession,
     createAddress,
     getAddress,

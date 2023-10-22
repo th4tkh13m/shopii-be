@@ -4,6 +4,7 @@ const Shop = require('./Shop')
 const Category = require('./Category')
 const Product = require('./Product')
 const Address = require('./Address')
+const ProductOption = require('./ProductOption')
 
 module.exports = {
     Customer,
@@ -12,4 +13,5 @@ module.exports = {
     Product,
     Category,
     Address,
+    ProductOption,
 }
