@@ -32,10 +32,6 @@ const getAllProducts = async (req, res) => {
         },
     ])
 
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
-    const skip = (page - 1) * limit
-    result.skip(skip).limit(limit)
     const products = await result.exec()
     let productsCustom = products.map(product => {
         const optionsPrices = product.productOptions.map(
@@ -50,16 +46,15 @@ const getAllProducts = async (req, res) => {
         }
     })
     if (startPrice) {
+        console.log(startPrice)
         productsCustom = productsCustom.filter(
-            product =>
-                product.minPrice >= +startPrice ||
-                product.maxPrice >= +startPrice,
+            product => product.minPrice >= +startPrice,
         )
+        console.log(productsCustom)
     }
     if (endPrice) {
         productsCustom = productsCustom.filter(
-            product =>
-                product.maxPrice <= +endPrice || product.minPrice <= +endPrice,
+            product => product.maxPrice <= +endPrice,
         )
     }
 
@@ -69,10 +64,12 @@ const getAllProducts = async (req, res) => {
     if (sort === 'asc') {
         productsCustom.sort((a, b) => a.minPrice - b.minPrice)
     }
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 10
+    const skip = (page - 1) * limit
+    const totalPage = Math.ceil(productsCustom.length / limit)
+    productsCustom = productsCustom.slice(skip, skip + limit)
 
-    const totalPage = Math.ceil(
-        (await Product.countDocuments(queryObject)) / limit,
-    )
     res.status(StatusCodes.OK).json({
         products: productsCustom,
         length: products.length,
