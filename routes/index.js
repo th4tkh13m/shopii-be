@@ -3,6 +3,7 @@ const shopRequestRouter = require('./shopRequest')
 const adminRouter = require('./admin')
 const addressRouter = require('./address')
 const categoryRouter = require('./category')
+const profileRouter = require('./profile')
 
 module.exports = {
     authRouter,
@@ -10,4 +11,5 @@ module.exports = {
     adminRouter,
     addressRouter,
     categoryRouter,
+    profileRouter
 }
