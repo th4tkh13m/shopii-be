@@ -2,7 +2,12 @@ const Product = require('../models/Product')
 const { StatusCodes } = require('http-status-codes')
 const ProductOption = require('../models/ProductOption')
 const { Shop } = require('../models')
-const { putImages, getImages, deleteImages } = require('../utils/awsServices')
+const {
+    putImages,
+    getImages,
+    deleteImages,
+    deleteAllImages,
+} = require('../utils/awsServices')
 
 const getAllProducts = async (req, res) => {
     const shop = await Shop.findOne({ userId: req.user.userId })
@@ -41,16 +46,21 @@ const createProduct = async (req, res) => {
     const productsOptionCreated = await ProductOption.insertMany(
         JSON.parse(req.body.productOptions),
     )
-    const productIds = productsOptionCreated.map(product => product._id)
-    // Create image in S3 from array [File] filesImage. After create image create variables [String]
-    await putImages('products', productIds, filesImage)
-    const imageUrls = await getImages('products', productIds)
+    const productOptionIds = productsOptionCreated.map(
+        productOption => productOption._id,
+    )
 
     const product = await Product.create({
         ...req.body,
-        productOptions: productIds,
-        productImages: imageUrls,
+        productOptions: productOptionIds,
     })
+
+    await putImages('products', product._id, filesImage)
+    const imageUrls = await getImages('products', product._id)
+
+    product.productImages = imageUrls
+    await product.save()
+
     await Shop.findOneAndUpdate(
         { userId: req.user.userId },
         { $push: { products: product._id } },
@@ -79,13 +89,14 @@ const updateProduct = async (req, res) => {
     const productImagesAfterDelete = JSON.parse(req.body.productImages).filter(
         image => !imagesDeleted.includes(image),
     )
-    if (imagesAdded) {
+    if (!!imagesAdded.length) {
         await putImages('products', productId, imagesAdded)
     }
     // Delete image from S3 with array type [String] imagesDeleted
     // Add image to S3 from array [File] imagesAdded. After create image create variables [String]
     //store link and replace variables TEST_UPDATED_IMAGES
-    if (imagesDeleted) {
+    if (!!imagesDeleted.length) {
+        console.log('IMAGE DELETED')
         console.log(imagesDeleted)
         await deleteImages(imagesDeleted)
     }
@@ -112,6 +123,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     const { id } = req.params
     await Product.findByIdAndRemove(id)
+    await deleteAllImages('products', id)
     res.status(StatusCodes.OK).send()
 }
 
