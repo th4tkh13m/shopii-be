@@ -79,8 +79,21 @@ const deleteImages = async deleteImages => {
     }
 }
 
+const deleteAllImages = async (type, typeId) => {
+    // TODO: delete folder
+    const key = `${type}/${typeId}/`
+
+    const deleteCommandParams = {
+        ...commandParams,
+        Key: key,
+    }
+
+    await client.send(new DeleteObjectCommand(deleteCommandParams))
+}
+
 module.exports = {
     getImages,
     putImages,
     deleteImages,
+    deleteAllImages,
 }
