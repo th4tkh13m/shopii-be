@@ -1,6 +1,8 @@
 const {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -27,6 +29,8 @@ const { getAllShopInfo, updateShop } = require('./shop')
 module.exports = {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     getAllRequestByUserId,
