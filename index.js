@@ -13,7 +13,6 @@ const {
     authRouter,
     shopRequestRouter,
     adminRouter,
-    shopRoute,
     addressRouter,
     categoryRouter,
     shopRouter,
@@ -36,7 +35,6 @@ app.use(cookieParser())
 
 // routes
 app.use('/auth', authRouter)
-app.use('/shop', verifyShop, shopRoute)
 app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
