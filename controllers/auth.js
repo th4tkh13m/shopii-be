@@ -155,7 +155,6 @@ const resetPassword = async (req, res) => {
     }
 
     const customer = _token.customer
-    console.log(customer)
     customer.password = password
 
     await customer.save()

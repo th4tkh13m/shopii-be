@@ -82,7 +82,6 @@ const updateProduct = async (req, res) => {
         productOptions.map(option => option._id),
         productOptionsCreated.map(option => option._id),
     ].flatMap(option => option)
-    console.log(productOptionsIds)
 
     const imagesAdded = req.files
     const imagesDeleted = JSON.parse(req.body.imagesDeleted)

@@ -45,8 +45,6 @@ const getImages = async (type, typeId) => {
     const images = result.Contents.filter(item =>
         item.Key.endsWith('.png'),
     ).map(img => getImageUrl(process.env.BUCKET, process.env.REGION, img.Key))
-    console.log('GET IMAGES')
-    console.log(images)
     return images
 }
 
@@ -72,8 +70,6 @@ const putImages = async (type, typeId, images) => {
 const deleteImages = async deleteImages => {
     for (let index = 0; index < deleteImages.length; index++) {
         const key = getImageKey(deleteImages[index])
-        console.log('KEY TO DELETE')
-        console.log(key)
         var deleteCommandParams = {
             ...commandParams,
             Key: key,
