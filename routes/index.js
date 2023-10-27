@@ -5,6 +5,7 @@ const adminRouter = require('./admin')
 const addressRouter = require('./address')
 const categoryRouter = require('./category')
 const shopRouter = require('./shop')
+const cartRouter = require('./cart')
 
 module.exports = {
     authRouter,
@@ -13,5 +14,6 @@ module.exports = {
     shopRoute,
     addressRouter,
     categoryRouter,
-    shopRouter
+    shopRouter,
+    cartRouter,
 }
