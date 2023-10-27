@@ -72,7 +72,6 @@ const updateProduct = async (req, res) => {
         productOptions.map(option => option._id),
         productOptionsCreated.map(option => option._id),
     ].flatMap(option => option)
-    console.log(productOptionsIds)
 
     const imagesAdded = req.files
     const imagesDeleted = JSON.parse(req.body.imagesDeleted)
@@ -86,7 +85,6 @@ const updateProduct = async (req, res) => {
     // Add image to S3 from array [File] imagesAdded. After create image create variables [String]
     //store link and replace variables TEST_UPDATED_IMAGES
     if (imagesDeleted) {
-        console.log(imagesDeleted)
         await deleteImages(imagesDeleted)
     }
 
