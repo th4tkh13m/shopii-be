@@ -1,5 +1,4 @@
 const express = require('express')
-const { getAllShopInfo, updateShop } = require('../controllers')
 const router = express.Router()
 const {
     getAllProducts,
