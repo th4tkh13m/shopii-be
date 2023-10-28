@@ -57,7 +57,24 @@ const addToCart = async (req, res) => {
         res.status(StatusCodes.OK).json(newCart)
     }
 }
+const updateCartProduct = async (req, res) => {
+    const userId = req.user.userId
+    const { productId, productOptionId, quantity } = req.body
+    const updateProduct = {
+        product: productId,
+        productOption: productOptionId,
+        quantity: quantity || 1,
+    }
+    await Cart.findOneAndUpdate({ userId }, { ...updateProduct })
+    res.status(StatusCodes.OK).json({
+        message: 'Sản phẩm  đã được cập nhật thành công.',
+        success: true,
+    })
+}
+const deleteCartProduct = async (req, res) => {}
+
 module.exports = {
     viewCartByUserId,
     addToCart,
+    updateCartProduct,
 }

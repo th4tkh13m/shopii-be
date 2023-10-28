@@ -25,6 +25,7 @@ const {
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
 const { getAllShopInfo, updateShop } = require('./shop')
+const { addToCart, updateCartProduct, viewCartByUserId } = require('./cart')
 
 module.exports = {
     register,
@@ -52,4 +53,7 @@ module.exports = {
     createCategory,
     getAllShopInfo,
     updateShop,
+    addToCart,
+    updateCartProduct,
+    viewCartByUserId,
 }
