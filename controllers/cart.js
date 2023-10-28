@@ -23,33 +23,38 @@ const viewCartByUserId = async (req, res) => {
 const addToCart = async (req, res) => {
     const userId = req.user.userId
     const { productId, productOptionId, quantity } = req.body
-    const existingCartItem = await Cart.findOne({
-        userId,
-        'products.product': productId,
-        'products.productOption': productOptionId,
-    })
+    const cart = await Cart.findOne({ userId })
+    const newProduct = {
+        product: productId,
+        productOption: productOptionId,
+        quantity: quantity || 1,
+    }
 
-    if (existingCartItem) {
-        if (quantity !== undefined) {
-            existingCartItem.products[0].quantity += quantity
+    if (cart) {
+        const existingProductIndex = cart.products.findIndex(
+            item =>
+                item.product.equals(productId) &&
+                item.productOption.equals(productOptionId),
+        )
+
+        if (existingProductIndex !== -1) {
+            if (quantity !== undefined) {
+                cart.products[existingProductIndex].quantity += quantity
+            } else {
+                cart.products[existingProductIndex].quantity += 1
+            }
         } else {
-            existingCartItem.products[0].quantity += 1
+            cart.products.push(newProduct)
         }
 
-        await existingCartItem.save()
-        res.status(StatusCodes.OK).json(existingCartItem)
-    } else {
-        const cart = await Cart.create({
-            userId,
-            products: [
-                {
-                    product: productId,
-                    productOption: productOptionId,
-                    quantity: quantity || 1,
-                },
-            ],
-        })
+        await cart.save()
         res.status(StatusCodes.OK).json(cart)
+    } else {
+        const newCart = await Cart.create({
+            userId,
+            products: [newProduct],
+        })
+        res.status(StatusCodes.OK).json(newCart)
     }
 }
 module.exports = {
