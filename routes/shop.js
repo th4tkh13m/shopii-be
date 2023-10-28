@@ -16,6 +16,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 router.route('/profile').get(getAllShopInfo).patch(updateShop)
+router.route('/profile').get(getAllShopInfo).patch(updateShop)
 router
     .route('/product')
     .get(getAllProducts)
