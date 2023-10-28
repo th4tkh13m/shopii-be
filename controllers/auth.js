@@ -142,7 +142,6 @@ const resetPassword = async (req, res) => {
     // const objectId = mongoose.Types.ObjectId(objectIdString);
     const _token = await Token.findById(tokenId).populate('customer').exec()
 
-    console.log(_token)
     if (_token.token !== token) {
         throw createCustomError(
             `Mã xác thục ${token} không đúng`,

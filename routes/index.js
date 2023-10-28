@@ -13,6 +13,6 @@ module.exports = {
     adminRouter,
     addressRouter,
     categoryRouter,
-    productRouter,
     shopRouter,
+    productRouter,
 }
