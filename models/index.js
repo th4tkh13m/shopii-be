@@ -9,7 +9,6 @@ const Token = require('./Token')
 
 module.exports = {
     Customer,
-    Address,
     ShopRequest,
     Shop,
     Product,

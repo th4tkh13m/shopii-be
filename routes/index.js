@@ -8,7 +8,6 @@ const productRouter = require('./products')
 
 module.exports = {
     authRouter,
-    addressRouter,
     shopRequestRouter,
     adminRouter,
     addressRouter,
