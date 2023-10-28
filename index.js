@@ -40,7 +40,7 @@ app.use('/admin', verifyAdmin, adminRouter)
 app.use('/category', categoryRouter)
 app.use('/shop', verifyShop, shopRouter)
 
-// error handler
+// error handlers
 app.use(notFound)
 app.use(errorHandler)
 
