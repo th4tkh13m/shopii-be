@@ -1,6 +1,8 @@
 const {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -8,6 +10,13 @@ const {
 } = require('./auth')
 const { getAllRequestByUserId, shopRegister } = require('./shopRequest')
 const { getRequestByStatus, handleShopRequest } = require('./admin')
+const {
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+} = require('./shopProduct')
 const {
     createAddress,
     getAddress,
@@ -21,16 +30,24 @@ const {
     getShops,
     getShopById,
 } = require('./products')
+const { getAllShopInfo, updateShop } = require('./shop')
 
 module.exports = {
     register,
     login,
+    genCodeResetPassword,
+    resetPassword,
     checkEmailExisted,
     loginGoogle,
     getAllRequestByUserId,
     shopRegister,
     getRequestByStatus,
     handleShopRequest,
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
     checkSession,
     createAddress,
     getAddress,
@@ -43,4 +60,6 @@ module.exports = {
     getProductByIdUser,
     getShops,
     getShopById,
+    getAllShopInfo,
+    updateShop,
 }
