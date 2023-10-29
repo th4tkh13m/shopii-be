@@ -24,6 +24,12 @@ const {
     deleteAddress,
 } = require('./address')
 const { getAllCategory, createCategory } = require('./category')
+const {
+    getAllProducts: getAllProductsUser,
+    getProductById: getProductByIdUser,
+    getShops,
+    getShopById,
+} = require('./products')
 const { getAllShopInfo, updateShop } = require('./shop')
 const {
     addToCart,
@@ -57,6 +63,10 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
+    getAllProductsUser,
+    getProductByIdUser,
+    getShops,
+    getShopById,
     getAllShopInfo,
     updateShop,
     addToCart,
