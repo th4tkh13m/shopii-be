@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
 const { Cart } = require('../models')
+const { createCustomError } = require('../errors/CustomError')
 
 const viewCartByUserId = async (req, res) => {
     const userId = req.user.userId
@@ -20,6 +21,7 @@ const viewCartByUserId = async (req, res) => {
 
     res.status(StatusCodes.OK).json(cart)
 }
+
 const addToCart = async (req, res) => {
     const userId = req.user.userId
     const { productId, productOptionId, quantity } = req.body
@@ -57,24 +59,72 @@ const addToCart = async (req, res) => {
         res.status(StatusCodes.OK).json(newCart)
     }
 }
+
 const updateCartProduct = async (req, res) => {
     const userId = req.user.userId
-    const { productId, productOptionId, quantity } = req.body
-    const updateProduct = {
-        product: productId,
-        productOption: productOptionId,
-        quantity: quantity || 1,
+    const { productId, productOptionId, quantity, newProductOptionId } =
+        req.body
+    const cart = await Cart.findOne({ userId })
+
+    const existingProductIndex = cart.products.findIndex(
+        item =>
+            item.product.equals(productId) &&
+            item.productOption.equals(productOptionId),
+    )
+    if (existingProductIndex !== -1) {
+        if (quantity !== undefined) {
+            cart.products[existingProductIndex].quantity = quantity
+        }
+
+        if (newProductOptionId) {
+            cart.products[existingProductIndex].productOption =
+                newProductOptionId
+        }
+
+        await cart.save()
+        res.status(StatusCodes.OK).json(cart)
+    } else {
+        throw createCustomError(
+            'Không tìm thấy sản phẩm',
+            StatusCodes.NOT_FOUND,
+        )
     }
-    await Cart.findOneAndUpdate({ userId }, { ...updateProduct })
-    res.status(StatusCodes.OK).json({
-        message: 'Sản phẩm  đã được cập nhật thành công.',
-        success: true,
-    })
 }
-const deleteCartProduct = async (req, res) => {}
+
+const deleteCartProduct = async (req, res) => {
+    const userId = req.user.userId
+    const { productId, productOptionId } = req.body
+    const cart = await Cart.findOne({ userId })
+
+    const existingProductIndex = cart.products.findIndex(
+        item =>
+            item.product.equals(productId) &&
+            item.productOption.equals(productOptionId),
+    )
+
+    if (existingProductIndex !== -1) {
+        cart.products.splice(existingProductIndex, 1)
+        await cart.save()
+        res.status(StatusCodes.OK).json(cart)
+    } else {
+        throw createCustomError(
+            'Không tìm thấy sản phẩm',
+            StatusCodes.NOT_FOUND,
+        )
+    }
+}
+
+const deleteAllProductFromCart = async (req, res) => {
+    const userId = req.user.userId
+
+    await Cart.deleteOne({ userId })
+    res.status(StatusCodes.OK).json({ message: 'Xóa sản phẩm thành công.' })
+}
 
 module.exports = {
     viewCartByUserId,
     addToCart,
     updateCartProduct,
+    deleteCartProduct,
+    deleteAllProductFromCart,
 }
