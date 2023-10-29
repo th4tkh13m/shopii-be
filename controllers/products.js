@@ -77,7 +77,19 @@ const getAllProducts = async (req, res) => {
     })
 }
 
-const getProductById = async (req, res) => {}
+const getProductById = async (req, res) => {
+    const { id } = req.params
+    const product = await Product.findById(id)
+        .populate('productCategory')
+        .populate('productOptions')
+        .exec()
+    if (!product) {
+        return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Product not found' })
+    }
+    res.status(StatusCodes.OK).json(product)
+}
 
 const getShops = async (req, res) => {
     const { location, keyword } = req.query
