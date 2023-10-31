@@ -84,9 +84,7 @@ const getProductById = async (req, res) => {
         .populate('productOptions')
         .exec()
     if (!product) {
-        return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ message: 'Product not found' })
+        throw createCustomError('Không thể tìm thấy sản phẩm.', StatusCodes.NOT_FOUND)
     }
     res.status(StatusCodes.OK).json(product)
 }
