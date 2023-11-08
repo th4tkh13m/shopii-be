@@ -2,7 +2,8 @@ const { StatusCodes } = require('http-status-codes')
 const { Customer } = require('../models')
 
 const updateUserInfo = async (req, res) => {
-    const { userId, name, phone, mail, dob, sex } = req.body
+    const userId = req.user.userId
+    const { name, phone, mail, dob, sex } = req.body
     console.log(userId)
 
     const customerInfo = await Customer.findOneAndUpdate(
