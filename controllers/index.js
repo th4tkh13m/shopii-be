@@ -68,8 +68,6 @@ module.exports = {
     logout,
     getAllCategory,
     createCategory,
-    getAllShopInfo,
-    updateShop,
     getAllProductsUser,
     getProductByIdUser,
     getShops,

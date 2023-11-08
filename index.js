@@ -15,8 +15,8 @@ const {
     adminRouter,
     addressRouter,
     categoryRouter,
-    shopRouter,
     productRouter,
+    shopRouter,
     cartRouter,
 } = require('./routes')
 const {
@@ -40,8 +40,8 @@ app.use('/shop-request', verifyUser, shopRequestRouter)
 app.use('/address', verifyUser, addressRouter)
 app.use('/admin', verifyAdmin, adminRouter)
 app.use('/category', categoryRouter)
-app.use('/shop', verifyShop, shopRouter)
 app.use('/products', productRouter)
+app.use('/shop', verifyShop, shopRouter)
 app.use('/cart', verifyUser, cartRouter)
 
 // error handlers
