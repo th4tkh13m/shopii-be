@@ -39,6 +39,7 @@ const {
     deleteCartProduct,
     deleteAllProductFromCart,
 } = require('./cart')
+const { updateUserInfo } = require('./customer')
 
 module.exports = {
     register,
@@ -79,4 +80,5 @@ module.exports = {
     viewCartByUserId,
     deleteCartProduct,
     deleteAllProductFromCart,
+    updateUserInfo,
 }
