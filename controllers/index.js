@@ -32,6 +32,13 @@ const {
     getShopById,
 } = require('./products')
 const { getAllShopInfo, updateShop } = require('./shop')
+const {
+    addToCart,
+    updateCartProduct,
+    viewCartByUserId,
+    deleteCartProduct,
+    deleteAllProductFromCart,
+} = require('./cart')
 
 module.exports = {
     register,
@@ -67,4 +74,9 @@ module.exports = {
     getShopById,
     getAllShopInfo,
     updateShop,
+    addToCart,
+    updateCartProduct,
+    viewCartByUserId,
+    deleteCartProduct,
+    deleteAllProductFromCart,
 }
