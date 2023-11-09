@@ -18,6 +18,7 @@ const {
     productRouter,
     shopRouter,
     cartRouter,
+    orderRouter,
     customerRouter,
 } = require('./routes')
 const {
@@ -44,6 +45,7 @@ app.use('/category', categoryRouter)
 app.use('/products', productRouter)
 app.use('/shop', verifyShop, shopRouter)
 app.use('/cart', verifyUser, cartRouter)
+app.use('/order', verifyUser, orderRouter)
 app.use('/profile', verifyUser, customerRouter)
 
 // error handlers
