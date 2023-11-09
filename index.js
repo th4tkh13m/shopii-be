@@ -18,6 +18,7 @@ const {
     productRouter,
     shopRouter,
     cartRouter,
+    customerRouter,
 } = require('./routes')
 const {
     verifyAdmin,
@@ -43,6 +44,7 @@ app.use('/category', categoryRouter)
 app.use('/products', productRouter)
 app.use('/shop', verifyShop, shopRouter)
 app.use('/cart', verifyUser, cartRouter)
+app.use('/profile', verifyUser, customerRouter)
 
 // error handlers
 app.use(notFound)
