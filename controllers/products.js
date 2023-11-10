@@ -80,7 +80,6 @@ const getAllProducts = async (req, res) => {
 const getProductById = async (req, res) => {
     const { id } = req.params
     const product = await Product.findById(id)
-        .populate('shopId')
         .populate('productCategory')
         .populate('productOptions')
         .exec()

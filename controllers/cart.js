@@ -35,8 +35,8 @@ const addToCart = async (req, res) => {
     if (cart) {
         const existingProductIndex = cart.products.findIndex(
             item =>
-                item.product.equals(productId) &&
-                item.productOption.equals(productOptionId),
+                item.product?.equals(productId) &&
+                item.productOption?.equals(productOptionId),
         )
 
         if (existingProductIndex !== -1) {
