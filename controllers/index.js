@@ -17,6 +17,7 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
+    deleteAllProducts,
 } = require('./shopProduct')
 const {
     createAddress,
@@ -42,6 +43,10 @@ const {
 const { getAllOrdersUser, createOrder } = require('./order')
 const { getAllOrdersShop, updateOrderStatus } = require('./shopOrder')
 const { updateUserInfo } = require('./customer')
+const {
+    deleteAllProductOptions,
+    createProductOption,
+} = require('./productOptions')
 
 module.exports = {
     register,
@@ -63,6 +68,9 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
+    deleteAllProducts,
+    createProductOption,
+    deleteAllProductOptions,
     checkSession,
     createAddress,
     getAddress,

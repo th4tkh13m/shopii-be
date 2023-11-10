@@ -5,6 +5,7 @@ const {
     getProductByIdUser,
     getShops,
     getShopById,
+    deleteAllProducts,
 } = require('../controllers/')
 
 router
@@ -12,5 +13,6 @@ router
     .get('/shops', getShops)
     .get('/:id', getProductByIdUser)
     .get('/shops/:id', getShopById)
+    .delete('/', deleteAllProducts)
 
 module.exports = router
