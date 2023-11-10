@@ -7,7 +7,7 @@ const viewCartByUserId = async (req, res) => {
     const cart = await Cart.find({ userId })
         .populate({
             path: 'products.product',
-            select: 'id productName productCategory productImages',
+            select: 'id shopId productName productCategory productImages',
             populate: {
                 path: 'productCategory',
                 select: 'id name',
