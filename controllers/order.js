@@ -7,31 +7,40 @@ const getAllOrdersUser = async (req, res) => {
     const orders = await Order.find({ userId }).populate([
         {
             path: 'products.productId',
-            select: 'productName',
+            select: 'productName productImages',
         },
         {
             path: 'products.optionProductId',
-            select: 'optionName',
+            select: 'optionName optionPrice optionQuantity',
         },
         {
             path: 'addressId',
-            select: 'addressName',
+            select: 'receiverName receiverPhone province district ward receiverAddress',
+        },
+        {
+            path: 'shopId',
+            select: 'shopName',
         },
     ])
     res.status(StatusCodes.OK).json(orders)
 }
 const createOrder = async (req, res) => {
     const userId = req.user.userId
-    const { addressId, products, paymentMethod } = req.body
+    const {
+        addressId,
+        products,
+        paymentMethod,
+        deliveryMethods,
+        deliveryPrices,
+    } = req.body
 
     var ordersMap = {}
 
     for (let i = 0; i < products.length; i++) {
         var productId = products[i].productId
         var product = await Product.findById(productId)
-        console.log(productId)
         if (product.shopId in ordersMap) {
-            ordersMap[shopId].push(products[i])
+            ordersMap[product.shopId].push(products[i])
         } else {
             ordersMap[product.shopId] = [products[i]]
         }
@@ -46,6 +55,10 @@ const createOrder = async (req, res) => {
             addressId,
             products: ordersMap[shopId],
             paymentMethod,
+            deliveryMethod: deliveryMethods.find(item => item.shopId === shopId)
+                .deliveryMethod,
+            deliveryPrice: deliveryPrices.find(item => item.shopId === shopId)
+                .deliveryPrice,
         })
         orders.push(order)
     }

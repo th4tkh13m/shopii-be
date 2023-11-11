@@ -45,6 +45,15 @@ const OrderSchema = new mongoose.Schema(
             enum: ['Pending', 'Accepted', 'Rejected'],
             default: 'Pending',
         },
+        deliveryMethod: {
+            type: String,
+        },
+        deliveryPrice: {
+            type: Number,
+        },
+        totalProductPrice: {
+            type: Number,
+        },
     },
     { timestamps: true },
 )
@@ -59,7 +68,7 @@ OrderSchema.pre('save', async function (next) {
         },
     })
 
-    const totalPrice = this.products.reduce((acc, cur) => {
+    const totalProductPrice = this.products.reduce((acc, cur) => {
         // Ensure that optionProductId is populated with the required optionPrice
         if (cur.optionProductId && cur.optionProductId.optionPrice) {
             return acc + cur.quantity * cur.optionProductId.optionPrice
@@ -67,7 +76,8 @@ OrderSchema.pre('save', async function (next) {
         return acc
     }, 0)
 
-    this.totalPrice = totalPrice
+    this.totalProductPrice = totalProductPrice
+    this.totalPrice = totalProductPrice + this.deliveryPrice
     next()
 })
 

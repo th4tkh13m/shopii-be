@@ -8,38 +8,38 @@ const getAllOrdersShop = async (req, res) => {
     const status = req.query.status
     var orders = null
     if (status === 'all') {
-        orders = await Order.findOne({ shopId: shop._id }).populate([
+        orders = await Order.find({ shopId: shop._id }).populate([
             {
                 path: 'products.productId',
-                select: 'productName',
+                select: 'productName productImages',
             },
             {
                 path: 'products.optionProductId',
-                select: 'optionName',
+                select: 'optionName optionPrice optionQuantity',
             },
             {
                 path: 'addressId',
-                select: 'addressName',
+                select: 'receiverName receiverPhone province district ward receiverAddress',
             },
         ])
     } else {
         // Captialize first letter
         const statusOrder = status.charAt(0).toUpperCase() + status.slice(1)
-        orders = await Order.findOne({
+        orders = await Order.find({
             shopId: shop._id,
             status: statusOrder,
         }).populate([
             {
                 path: 'products.productId',
-                select: 'productName',
+                select: 'productName productImages',
             },
             {
                 path: 'products.optionProductId',
-                select: 'optionName',
+                select: 'optionName optionPrice optionQuantity',
             },
             {
                 path: 'addressId',
-                select: 'addressName',
+                select: 'receiverName receiverPhone province district ward receiverAddress',
             },
         ])
     }
