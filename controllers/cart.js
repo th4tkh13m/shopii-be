@@ -15,7 +15,7 @@ const viewCartByUserId = async (req, res) => {
         })
         .populate({
             path: 'products.productOption',
-            select: 'id optionPrice',
+            select: 'id optionPrice optionQuantity',
         })
         .exec()
 
