@@ -10,12 +10,16 @@ const viewCartByUserId = async (req, res) => {
             select: 'id shopId productName productCategory productImages',
             populate: {
                 path: 'productCategory',
-                select: 'id name',
+                select: 'id categoryName',
+            },
+            populate: {
+                path: 'shopId',
+                select: 'shopName',
             },
         })
         .populate({
             path: 'products.productOption',
-            select: 'id optionPrice',
+            select: 'id optionPrice optionQuantity',
         })
         .exec()
 
