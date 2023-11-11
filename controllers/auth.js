@@ -30,14 +30,12 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { info, password } = req.body
-    let mail = null
-    let phone = null
+    let customer = null
     if (info.includes('@')) {
-        mail = info
+        customer = await Customer.findOne({ mail: info })
     } else {
-        phone = info
+        customer = await Customer.findOne({ phone: info })
     }
-    const customer = await Customer.findOne({ mail, phone })
     if (!customer) {
         throw createCustomError(
             `Không tìm thấy tài khoản`,
