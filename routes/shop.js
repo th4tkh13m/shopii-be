@@ -27,5 +27,5 @@ router
     .get(getProductById)
     .patch(upload.array('imagesAdded', 5), updateProduct)
     .delete(deleteProduct)
-router.route('/order').get(getAllOrdersShop).patch(updateOrderStatus)
+router.route('/orders').get(getAllOrdersShop).patch(updateOrderStatus)
 module.exports = router

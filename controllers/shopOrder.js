@@ -5,20 +5,45 @@ const getAllOrdersShop = async (req, res) => {
     const userId = req.user.userId
     const shop = await Shop.findOne({ userId })
 
-    const orders = await Order.findOne({ shopId: shop._id }).populate([
-        {
-            path: 'products.productId',
-            select: 'productName',
-        },
-        {
-            path: 'products.optionProductId',
-            select: 'optionName',
-        },
-        {
-            path: 'addressId',
-            select: 'addressName',
-        },
-    ])
+    const status = req.query.status
+    var orders = null
+    if (status === 'all') {
+        orders = await Order.findOne({ shopId: shop._id }).populate([
+            {
+                path: 'products.productId',
+                select: 'productName',
+            },
+            {
+                path: 'products.optionProductId',
+                select: 'optionName',
+            },
+            {
+                path: 'addressId',
+                select: 'addressName',
+            },
+        ])
+    } else {
+        // Captialize first letter
+        const statusOrder = status.charAt(0).toUpperCase() + status.slice(1)
+        orders = await Order.findOne({
+            shopId: shop._id,
+            status: statusOrder,
+        }).populate([
+            {
+                path: 'products.productId',
+                select: 'productName',
+            },
+            {
+                path: 'products.optionProductId',
+                select: 'optionName',
+            },
+            {
+                path: 'addressId',
+                select: 'addressName',
+            },
+        ])
+    }
+
     res.status(StatusCodes.OK).json(orders)
 }
 const updateOrderStatus = async (req, res) => {
