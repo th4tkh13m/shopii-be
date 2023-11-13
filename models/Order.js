@@ -54,6 +54,12 @@ const OrderSchema = new mongoose.Schema(
         totalProductPrice: {
             type: Number,
         },
+        paymentId: {
+            type: String,
+        },
+        refundAmount: {
+            type: Number,
+        }
     },
     { timestamps: true },
 )

@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
 const { Order, Shop } = require('../models')
+const paypal = require('paypal-rest-sdk')
 
 const getAllOrdersShop = async (req, res) => {
     const userId = req.user.userId
@@ -46,6 +47,13 @@ const getAllOrdersShop = async (req, res) => {
 
     res.status(StatusCodes.OK).json(orders)
 }
+
+paypal.configure({
+    mode: 'sandbox',
+    client_id: process.env.VITE_PAYPAL_CLIENT_ID,
+    client_secret: process.env.VITE_PAYPAL_CLIENT_SECRET,
+})
+
 const updateOrderStatus = async (req, res) => {
     const userId = req.user.userId
     const shop = await Shop.findOne({ userId })
@@ -56,6 +64,25 @@ const updateOrderStatus = async (req, res) => {
         { status },
         { new: true, runValidator: true },
     )
+
+    if (status === 'Rejected' && order.paymentMethod === 'paypal') {
+        const refundDetails = {
+            amount: {
+                total: order.refundAmount,
+                currency: 'USD',
+            },
+        }
+    console.log('refundDetails', refundDetails)
+    console.log('ID', order.paymentId)
+        paypal.sale.refund(order.paymentId, refundDetails, (error, refund) => {
+            if (error) {
+              console.error('Error refunding payment:', error.response);
+            } else {
+              console.log('Refund successful:', refund);
+            }
+        })
+    }
+
     res.status(StatusCodes.CREATED).json(order)
 }
 
