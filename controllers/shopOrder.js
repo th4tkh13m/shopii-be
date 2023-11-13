@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
-const { Order, Shop } = require('../models')
+const { Order, Shop, ProductOption } = require('../models')
 const paypal = require('paypal-rest-sdk')
 
 const getAllOrdersShop = async (req, res) => {
@@ -60,10 +60,16 @@ const updateOrderStatus = async (req, res) => {
     const { orderId, status } = req.body
 
     const order = await Order.findOneAndUpdate(
-        { _id: orderId, shopId: shop._id },
+        { _id: orderId, shopId: shop._id, status: 'Pending' },
         { status },
         { new: true, runValidator: true },
     )
+
+    if (!order) {
+        return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ error: 'Order not found or already processed.' })
+    }
 
     if (status === 'Rejected' && order.paymentMethod === 'paypal') {
         const refundDetails = {
@@ -79,6 +85,16 @@ const updateOrderStatus = async (req, res) => {
                 console.log('Refund successful:', refund)
             }
         })
+    }
+
+    if (status === 'Accepted') {
+        for (const product of order.products) {
+            await ProductOption.findOneAndUpdate(
+                { _id: product.optionProductId },
+                { $inc: { optionQuantity: -product.quantity } },
+                { new: true, runValidator: true },
+            )
+        }
     }
 
     res.status(StatusCodes.CREATED).json(order)
