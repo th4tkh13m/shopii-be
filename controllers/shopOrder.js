@@ -50,8 +50,8 @@ const getAllOrdersShop = async (req, res) => {
 
 paypal.configure({
     mode: 'sandbox',
-    client_id: process.env.VITE_PAYPAL_CLIENT_ID,
-    client_secret: process.env.VITE_PAYPAL_CLIENT_SECRET,
+    client_id: process.env.PAYPAL_CLIENT_ID,
+    client_secret: process.env.PAYPAL_CLIENT_SECRET,
 })
 
 const updateOrderStatus = async (req, res) => {
@@ -72,13 +72,11 @@ const updateOrderStatus = async (req, res) => {
                 currency: 'USD',
             },
         }
-    console.log('refundDetails', refundDetails)
-    console.log('ID', order.paymentId)
         paypal.sale.refund(order.paymentId, refundDetails, (error, refund) => {
             if (error) {
-              console.error('Error refunding payment:', error.response);
+                console.error('Error refunding payment:', error.response)
             } else {
-              console.log('Refund successful:', refund);
+                console.log('Refund successful:', refund)
             }
         })
     }
