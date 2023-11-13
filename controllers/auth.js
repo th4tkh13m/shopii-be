@@ -30,14 +30,12 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { info, password } = req.body
-    let mail = null
-    let phone = null
+    let customer = null
     if (info.includes('@')) {
-        mail = info
+        customer = await Customer.findOne({ mail: info })
     } else {
-        phone = info
+        customer = await Customer.findOne({ phone: info })
     }
-    const customer = await Customer.findOne({ mail, phone })
     if (!customer) {
         throw createCustomError(
             `Không tìm thấy tài khoản`,
@@ -57,6 +55,34 @@ const login = async (req, res) => {
         roles: customer.roles,
     })
     res.cookie('token', token, { maxAge: 86400000, httpOnly: true })
+    res.status(StatusCodes.OK).json({
+        ...customer.toObject(),
+        password: undefined,
+        securityCode: undefined,
+    })
+}
+
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword, reNewPassword } = req.body
+    const customerId = req.user.userId
+
+    if (newPassword !== reNewPassword) {
+        throw createCustomError(
+            'Mật khẩu và nhập lại mật khẩu không khớp',
+            StatusCodes.BAD_REQUEST,
+        )
+    }
+
+    const customer = await Customer.findById(customerId)
+
+    const isPasswordCorrect = await customer.comparePassword(oldPassword)
+    if (!isPasswordCorrect) {
+        throw createCustomError('Mật khẩu không đúng', StatusCodes.UNAUTHORIZED)
+    }
+
+    customer.password = newPassword
+    await customer.save()
+
     res.status(StatusCodes.OK).json({
         ...customer.toObject(),
         password: undefined,
@@ -220,6 +246,7 @@ module.exports = {
     register,
     login,
     genCodeResetPassword,
+    changePassword,
     resetPassword,
     checkEmailExisted,
     loginGoogle,

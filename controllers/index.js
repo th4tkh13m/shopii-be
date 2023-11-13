@@ -3,6 +3,7 @@ const {
     login,
     genCodeResetPassword,
     resetPassword,
+    changePassword,
     checkEmailExisted,
     loginGoogle,
     checkSession,
@@ -31,16 +32,30 @@ const {
     getShopById,
 } = require('./products')
 const { getAllShopInfo, updateShop } = require('./shop')
+const {
+    addToCart,
+    updateCartProduct,
+    viewCartByUserId,
+    deleteCartProduct,
+    deleteAllProductFromCart,
+} = require('./cart')
+const { getAllOrdersUser, createOrder } = require('./order')
+const { getAllOrdersShop, updateOrderStatus } = require('./shopOrder')
+const { updateUserInfo } = require('./customer')
 
 module.exports = {
     register,
     login,
     genCodeResetPassword,
     resetPassword,
+    changePassword,
     checkEmailExisted,
-    loginGoogle,
     getAllRequestByUserId,
     shopRegister,
+    editAddress,
+    loginGoogle,
+    handleShopRequest,
+    getRequestByStatus,
     getRequestByStatus,
     handleShopRequest,
     getAllProducts,
@@ -62,4 +77,14 @@ module.exports = {
     getShopById,
     getAllShopInfo,
     updateShop,
+    addToCart,
+    updateCartProduct,
+    viewCartByUserId,
+    deleteCartProduct,
+    deleteAllProductFromCart,
+    getAllOrdersUser,
+    createOrder,
+    getAllOrdersShop,
+    updateOrderStatus,
+    updateUserInfo,
 }
