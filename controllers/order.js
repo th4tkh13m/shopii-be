@@ -24,6 +24,7 @@ const getAllOrdersUser = async (req, res) => {
     ])
     res.status(StatusCodes.OK).json(orders)
 }
+
 const createOrder = async (req, res) => {
     const userId = req.user.userId
     const {
@@ -32,10 +33,11 @@ const createOrder = async (req, res) => {
         paymentMethod,
         deliveryMethods,
         deliveryPrices,
+        paymentId,
+        refundAmount
     } = req.body
 
     var ordersMap = {}
-
     for (let i = 0; i < products.length; i++) {
         var productId = products[i].productId
         var product = await Product.findById(productId)
@@ -59,10 +61,11 @@ const createOrder = async (req, res) => {
                 .deliveryMethod,
             deliveryPrice: deliveryPrices.find(item => item.shopId === shopId)
                 .deliveryPrice,
+            paymentId,
+            refundAmount
         })
         orders.push(order)
     }
-
     // Remove products in cart
     const cart = await Cart.findOne({ userId })
 

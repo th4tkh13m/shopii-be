@@ -40,7 +40,7 @@ const {
     deleteAllProductFromCart,
 } = require('./cart')
 const { getAllOrdersUser, createOrder } = require('./order')
-const { getAllOrdersShop, updateOrderStatus } = require('./shopOrder')
+const { getAllOrdersShop, updateOrderStatus, getStatisticsShop } = require('./shopOrder')
 const { updateUserInfo } = require('./customer')
 
 module.exports = {
@@ -87,4 +87,5 @@ module.exports = {
     getAllOrdersShop,
     updateOrderStatus,
     updateUserInfo,
+    getStatisticsShop
 }

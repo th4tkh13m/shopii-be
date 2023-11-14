@@ -28,7 +28,7 @@ const getAllProducts = async (req, res) => {
         },
         {
             path: 'productOptions',
-            select: 'optionPrice',
+            select: 'optionPrice optionQuantity',
         },
     ])
 
