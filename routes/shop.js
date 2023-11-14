@@ -10,6 +10,7 @@ const {
     updateShop,
     updateOrderStatus,
     getAllOrdersShop,
+    getStatisticsShop
 } = require('../controllers')
 
 const multer = require('multer')
@@ -28,4 +29,5 @@ router
     .patch(upload.array('imagesAdded', 5), updateProduct)
     .delete(deleteProduct)
 router.route('/orders').get(getAllOrdersShop).patch(updateOrderStatus)
+router.route('/statistics').get(getStatisticsShop)
 module.exports = router
