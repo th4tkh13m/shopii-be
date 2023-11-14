@@ -90,14 +90,14 @@ const getStatisticsShop = async (req, res) => {
             $limit: 1,
         },
     ])
-    const bestSellerProduct = await Product.find({ _id: productSoldQuantity[0]._id })
+    const bestSellerProduct = productSoldQuantity[0] ? await Product.find({ _id: productSoldQuantity[0]._id }) : undefined
     res.status(StatusCodes.OK).json({
         numberPendingOrders: numberPendingOrders,
         numberAcceptedOrders: numberAcceptedOrders,
         numberRejectedOrders: numberRejectedOrders,
         totalOrders: totalOrders,
         mostSalesProducts: bestSellerProduct,
-        mostSalesProductQuantity: productSoldQuantity[0].totalQuantity,
+        mostSalesProductQuantity: productSoldQuantity[0] ? productSoldQuantity[0].totalQuantity : undefined,
     })
     // res.status(StatusCodes.OK).json(bestSellerProduct)
 }
