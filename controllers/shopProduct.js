@@ -74,10 +74,23 @@ const updateProduct = async (req, res) => {
     const productOptions = JSON.parse(req.body.productOptions)
     const productOptionsDeleted = JSON.parse(req.body.productOptionsDeleted)
     const productOptionsNew = productOptions.filter(option => !option._id)
+    const productOptionsUpdated = productOptions.filter(option => !!option._id)
     const productOptionsCreated = await ProductOption.insertMany(
         productOptionsNew,
     )
     await ProductOption.deleteMany({ _id: { $in: productOptionsDeleted } })
+    productOptionsUpdated.forEach(async option => {
+        await ProductOption.findByIdAndUpdate(
+            option._id,
+            {
+                ...option,
+            },
+            {
+                new: true,
+                runValidators: true,
+            },
+        )
+    })
     const productOptionsIds = [
         productOptions.map(option => option._id),
         productOptionsCreated.map(option => option._id),
@@ -101,6 +114,7 @@ const updateProduct = async (req, res) => {
     }
 
     const productImages = await getImages('products', productId)
+    console.log(productOptionsUpdated)
 
     const productUpdated = await Product.findByIdAndUpdate(
         { _id: productId },
