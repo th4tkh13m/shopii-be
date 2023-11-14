@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
-const { Order, Shop, ProductOption } = require('../models')
+const { Order, Shop, ProductOption, Product } = require('../models')
 const paypal = require('paypal-rest-sdk')
 
 const getAllOrdersShop = async (req, res) => {
@@ -46,6 +46,60 @@ const getAllOrdersShop = async (req, res) => {
     }
 
     res.status(StatusCodes.OK).json(orders)
+}
+
+const getStatisticsShop = async (req, res) => {
+    const userId = req.user.userId
+    const shop = await Shop.findOne({ userId })
+
+    const numberAcceptedOrders = await Order.countDocuments({
+        status: 'Accepted',
+        shopId: shop._id,
+    })
+    const acceptedOrders = await Order.find({
+        status: 'Accepted',
+        shopId: shop._id,
+    })
+    const totalOrders = acceptedOrders.reduce(
+        (total, order) => total + order.totalPrice,
+        0,
+    )
+
+    const numberRejectedOrders = await Order.countDocuments({
+        status: 'Rejected',
+        shopId: shop._id,
+    })
+    const numberPendingOrders = await Order.countDocuments({
+        status: 'Pending',
+        shopId: shop._id,
+    })
+
+    const productSoldQuantity = await Order.aggregate([
+        { $match: { status: 'Accepted', shopId: shop._id } },
+        { $unwind: '$products' },
+        {
+            $group: {
+                _id: '$products.productId',
+                totalQuantity: { $sum: '$products.quantity' },
+            },
+        },
+        {
+            $sort: { totalQuantity: -1 },
+        },
+        {
+            $limit: 1,
+        },
+    ])
+    const bestSellerProduct = await Product.find({ _id: productSoldQuantity[0]._id })
+    res.status(StatusCodes.OK).json({
+        numberPendingOrders: numberPendingOrders,
+        numberAcceptedOrders: numberAcceptedOrders,
+        numberRejectedOrders: numberRejectedOrders,
+        totalOrders: totalOrders,
+        mostSalesProducts: bestSellerProduct,
+        mostSalesProductQuantity: productSoldQuantity[0].totalQuantity,
+    })
+    // res.status(StatusCodes.OK).json(bestSellerProduct)
 }
 
 paypal.configure({
@@ -103,4 +157,5 @@ const updateOrderStatus = async (req, res) => {
 module.exports = {
     getAllOrdersShop,
     updateOrderStatus,
+    getStatisticsShop,
 }
